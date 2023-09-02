@@ -1,0 +1,22 @@
+#main {
+    height:100vh;
+    width:100vw;
+    /* border:2px solid red; */
+}
+
+#add_category_form {
+    height:60vh;
+    width:50vw;
+    /* border:2px solid grey; */
+    /* box-shadow: 10px; */
+    margin:auto;
+    margin-top:3%;
+}
+
+.category_form_input {
+    height:10vh;
+    width:30vw;
+    /* border:2px solid red; */
+    margin:auto;
+    margin-top:5%;
+}
