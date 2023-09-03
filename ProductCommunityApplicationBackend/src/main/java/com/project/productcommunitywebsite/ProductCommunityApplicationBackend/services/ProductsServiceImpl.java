@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.project.productcommunitywebsite.ProductCommunityApplicationBackend.dao.ProductsDao;
 import com.project.productcommunitywebsite.ProductCommunityApplicationBackend.entities.Categories;
 import com.project.productcommunitywebsite.ProductCommunityApplicationBackend.entities.Products;
+import com.project.productcommunitywebsite.ProductCommunityApplicationBackend.model.Brands;
 
 @Service
 public class ProductsServiceImpl implements ProductsService {
@@ -65,6 +67,11 @@ public class ProductsServiceImpl implements ProductsService {
 		productsDao.deleteById(id);
 	}
 	
+	@Override
+	public List<Products> getProductByBrand(ArrayList<String> brand) {
+		List<Products> products=productsDao.findByProductBrand(brand);
+		return products;
+	}
 	// Service to upload product image
 	
 	@Override

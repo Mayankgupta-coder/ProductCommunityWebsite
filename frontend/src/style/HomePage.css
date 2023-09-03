@@ -2,12 +2,10 @@
 #main {
     height:100vh;
     width:100vw;
-    /* border:2px solid red; */
 }
 #all_stats {
     height:40vh;
     width:100vw;
-    /* border:2px solid red; */
     display:flex;
     flex-wrap: wrap;
     background-image: url('https://wallpapercave.com/wp/wp7429710.jpg');
@@ -17,7 +15,6 @@
 .stats {
     height:30%;
     width:10%;
-    /* border:2px solid red; */
     margin-top:10%;
     margin-left:5%;
     display:flex;
@@ -26,45 +23,40 @@
 .icon {
     height:100%;
     width:50%;
-    /* border:2px solid yellow; */
 }
 
 .stat {
     height:100%;
     width:50%;
     color:white;
-    /* border:2px solid yellow; */
 }
 
 #categories {
     height:60vh;
     width:100vw;
-    /* border:2px solid red; */
 }
 
 #display_categories {
     height:auto;
     width:100vw;
-    border:2px solid blue;
+    /* border:2px solid blue; */
     display:flex;
     flex-wrap:wrap;
-    /* display: grid;
-  grid-template-columns: auto auto auto;
-  background-color: #2196F3;
-  padding: 10px; */
 }
 
 .category {
-    height:150px;
+    height:auto;
     width:15%;
-    border:2px solid red;
+    /* border:2px solid red; */
     border-radius:70%;
     margin:auto;
     margin-top:3%;
     margin-left:2%;
+    display:flex;
+    flex-wrap: wrap;
     
 }
-#category_img{
+.category_img{
     height:150px;
     width:100%;
     /* border:2px solid red; */
@@ -74,5 +66,5 @@
 
 h1 {
     font-family: 'Roboto Condensed', sans-serif;
-    margin-left:45%;
+    margin-left:40%;
 }

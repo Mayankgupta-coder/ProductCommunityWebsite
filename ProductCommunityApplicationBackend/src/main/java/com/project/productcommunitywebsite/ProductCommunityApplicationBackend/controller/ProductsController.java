@@ -118,34 +118,20 @@ public class ProductsController {
 	
 	//	Api to search products
 
-	@PostMapping("/search/products/{id}")
+	@PostMapping("/search/products")
 	@CrossOrigin("*")
-	public ResponseEntity<List<Products>>searchProduct(@RequestBody Brands brands,@PathVariable("id") int id){
-		List<Object>brand=brands.getBrands();
-		List<Products>finaProducts = new ArrayList<Products>();
-		List<Products> products=productsService.getProducts();
-		if(id==-1) {
-			for(int i=0;i<brand.size();i++) {
-				for(int j=0;j<products.size();j++) {
-					boolean flag=String.valueOf(products.get(j).getProductBrand()).equals(String.valueOf(brand.get(i)));
-					if(flag) {
-						System.out.println(products.get(j));
-						finaProducts.add(products.get(j));
-					}
-				}
+	public ResponseEntity<List<Products>>searchProduct(@RequestBody Brands brands){
+		try {
+			List<Products> products=productsService.getProductByBrand(brands.getBrands());
+			if(products.size()==0) {
+				return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
 			}
-		} else {
-			for(int i=0;i<brand.size();i++) {
-				for(int j=0;j<products.size();j++) {
-					boolean flag=String.valueOf(products.get(j).getProductBrand()).equals(String.valueOf(brand.get(i)));
-					if(flag && (products.get(j).getCategory().getCategoryId()==id)) {
-						System.out.println(products.get(j));
-						finaProducts.add(products.get(j));
-					}
-				}
-			}
+			return new ResponseEntity<>(products,HttpStatus.OK);
+		} catch(Exception e) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
 		}
-		return new ResponseEntity<>(finaProducts,HttpStatus.OK);
+		
+		
 	}
 	
 	//	Api to upload product image
@@ -155,7 +141,7 @@ public class ProductsController {
 	public void uploadProductImage(@RequestParam("productImage") MultipartFile image,@PathVariable("id") int id) throws IOException {
 		Products product=productsService.getProduct(id);
 //		System.out.println(product);
-		String path="C:\\Users\\mayankgupta08\\Desktop\\java_task\\mayank-gupta\\Assignments\\ExitTest\\ProductCommunityWebsiteFrontend\\src\\assets\\images\\products";
+		String path="C:\\Users\\DELL\\Desktop\\ProductCommunityWebsite\\frontend\\public\\images\\products";
 		String fileName=productsService.uploadProductImage(path, image);
 //		System.out.println(path);
 		product.setProductImage(fileName);

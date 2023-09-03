@@ -1,6 +1,7 @@
 package com.project.productcommunitywebsite.ProductCommunityApplicationBackend.services;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.web.multipart.MultipartFile;
@@ -19,6 +20,8 @@ public Products addProduct(Products product);
 	public List<Products> getProductsByCategory(Categories category);
 	
 	public Products updateProduct(Products product,int id);
+	
+	public List<Products> getProductByBrand(ArrayList<String> brand);
 	
 	public void deleteProduct(int id);
 	

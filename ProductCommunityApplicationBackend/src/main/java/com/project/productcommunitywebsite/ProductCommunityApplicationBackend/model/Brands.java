@@ -3,9 +3,9 @@ package com.project.productcommunitywebsite.ProductCommunityApplicationBackend.m
 import java.util.ArrayList;
 
 public class Brands {
-	private ArrayList<Object>brands;
+	private ArrayList<String>brands;
 
-	public Brands(ArrayList<Object> brands) {
+	public Brands(ArrayList<String> brands) {
 		super();
 		this.brands = brands;
 	}
@@ -14,11 +14,11 @@ public class Brands {
 		super();
 	}
 
-	public ArrayList<Object> getBrands() {
+	public ArrayList<String> getBrands() {
 		return brands;
 	}
 
-	public void setBrands(ArrayList<Object> brands) {
+	public void setBrands(ArrayList<String> brands) {
 		this.brands = brands;
 	}
 }
