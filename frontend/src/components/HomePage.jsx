@@ -57,6 +57,7 @@ function HomePage() {
                 </div>
 
                 <div id="categories">
+                    <br/>
                     <h1>Categories</h1>
                     <div id="display_categories">
                         {
@@ -65,9 +66,9 @@ function HomePage() {
                                     <>
                                         <div className="category">
 
-                                            <img className="category_img" src={`images/${category.categoryImage}`} alt="img" />
+                                            {category.categoryImage!=="test"?(<img className="category_img" src={`images/${category.categoryImage}`} alt="img" />):(<img className="category_img" src={`images/products/default_product_image.jpg`} alt="img" />)}
 
-                                            <div id="category_name" style={{ border: "2px solid red" }}>
+                                            <div id="category_name" style={{margin:"auto",marginTop:"5%" }}>
                                                 {category.categoryName}
                                             </div>
 

@@ -6,48 +6,61 @@ import Typography from '@mui/material/Typography';
 import { Button, CardActionArea, CardActions } from '@mui/material';
 import { MDBCheckbox } from 'mdb-react-ui-kit';
 import axios from "axios";
-import '../style/Products.css'
+import '../style/Products.css';
+import { getProducts,filterProductsByBrand } from '../services/productService';
 
 function Products() {
+    let [products, setProducts] = useState([]);
+    let [brands, setBrands] = useState([]);
+    let [uniqueBrand,setUniqueBrand]=useState([]);
+
     useEffect(() => {
-        axios.get('http://localhost:8085/products').then((response) => {
+        console.log(process.env.PUBLIC_URL);
+        getProducts().then((product)=>{
+            setProducts(product);
+        }).catch((error)=>{
+            console.log(error);
+        })
+
+        axios.get('http://localhost:8085/brands').then((response) => {
             return response.data;
         }).then((data) => {
             console.log(data);
-            setProducts(data);
-            setProductsForBrand(data);
+            setUniqueBrand(data);
         }).catch((error) => {
             console.log(error);
         })
-    }, [])
-    let [products, setProducts] = useState([]);
-    let [productsForBrand, setProductsForBrand] = useState([]);
-    let [brands,setBrands]=useState([]);
+    }, []);
 
-    function filterProductsByBrand(e){
-        // console.log(e.target.checked,e.target.value);
-        let selected=e.target.checked;
-        let value=e.target.value;
-        if(selected) {
-            setBrands([...brands,value]);
-            console.log(brands);
+    useEffect(() => {
+        if (brands.length > 0) {
+            filterProductsByBrand(brands).then((product) => {
+                setProducts(product);
+            }).catch((error) => {
+                console.log(error);
+            })
         }
         else {
-            let brand=brands.filter((brand)=>{
-                return brand!==e.target.value;
+            getProducts().then((product)=>{
+                setProducts(product);
+            }).catch((error)=>{
+                console.log(error);
+            })
+        }
+    }, [brands]);
+
+    let selectBrand=(e)=> {
+        if (e.target.checked) {
+            setBrands([...brands, e.target.value]);
+        }
+        else {
+            let brand = brands.filter((brand) => {
+                return brand !== e.target.value;
             });
-            console.log("brand",brand);
+
             setBrands(brand);
         }
-        // console.log(brands);
-        // axios.post('http://localhost:8085//search/products',{brands:brands}).then((response) => {
-        //     return response.data;
-        // }).then((data) => {
-        //     console.log(data);
-        //     setProducts(data);
-        // }).catch((error) => {
-        //     console.log(error);
-        // })
+
     }
     return (
         <>
@@ -55,18 +68,17 @@ function Products() {
             <div id="product_page">
                 <div id="filter_product">
                     <h2>Brands</h2>
-                    <br/>
+                    <br />
                     {
-                        productsForBrand.map((product)=>{
+                        uniqueBrand.map((brand,index) => {
                             return (
                                 <>
-                                    <MDBCheckbox onChange={filterProductsByBrand} name='flexCheck' value={product.productBrand} id='flexCheckDefault' label={product.productBrand} />
+                                    <MDBCheckbox onChange={selectBrand} key={index} name='flexCheck' value={brand} id='flexCheckDefault' label={brand} />
                                 </>
                             )
-                            
                         })
                     }
-                    
+
                 </div>
                 <div id="products">
                     {products.map((product) => {
@@ -94,11 +106,17 @@ function Products() {
                                     }
 
                                     <CardContent>
+                                    <span>Product Name:</span>
                                         <Typography gutterBottom variant="h5" component="div">
+                                            {product.productName}
+                                        </Typography>
+                                        <span>Product Brand:</span>
+                                        <Typography variant="body2" color="text.secondary">
                                             {product.productBrand}
                                         </Typography>
+                                        <span>Product Price:</span>
                                         <Typography variant="body2" color="text.secondary">
-                                            {product.productDescription}
+                                            {product.productPrice}
                                         </Typography>
                                     </CardContent>
                                 </CardActionArea>

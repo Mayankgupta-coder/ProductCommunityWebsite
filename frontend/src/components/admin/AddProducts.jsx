@@ -10,18 +10,11 @@ import {
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import MenuItem from '@mui/material/MenuItem';
+import { addProduct,uploadProductImage } from '../../services/productService';
 
 function AddProducts() {
 
     useEffect(() => {
-        axios.get('http://localhost:8085/products').then((response) => {
-            return response.data;
-        }).then((data) => {
-            console.log(data);
-        }).catch((error) => {
-            console.log(error);
-        })
-
         axios.get('http://localhost:8085/categories').then((response) => {
             return response.data;
         }).then((data) => {
@@ -43,14 +36,11 @@ function AddProducts() {
         console.log(productImage);
         const formData = new FormData();
         formData.append('productImage', productImage.productImage);
-        axios.post('http://localhost:8085/products', product).then((response) => {
-            return response.data;
-        }).then((data) => {
-            console.log(data);
-            axios.post(`http://localhost:8085//product/image/uplaod/${product.productId}`, formData).then((response) => {
-                return response.data;
-            }).then((data) => {
-                console.log(data);
+
+        addProduct(product).then((product) => {
+            console.log(product);
+            uploadProductImage(product.productId,formData).then((productImage) => {
+                console.log(productImage);
             }).catch((error) => {
                 console.log(error);
             })
@@ -103,7 +93,7 @@ function AddProducts() {
                         </TextField>
                         </Box>
                     
-                        <MDBFile label='Product Image' id='product_image' name="product_image" onChange={(e) => { setProductImage({ productImage: e.target.files[0] }) }} required />
+                        <MDBFile label='Product Image' id='upload_product_image' name="product_image" onChange={(e) => { setProductImage({ productImage: e.target.files[0] }) }} required />
                         <br />
                         <MDBBtn type='submit' block>
                             Submit

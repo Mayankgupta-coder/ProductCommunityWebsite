@@ -1,0 +1,22 @@
+#main {
+    height:auto;
+    width:100vw;
+    /* border:2px solid red; */
+}
+#product{
+    height:60vh;
+    width:100vw;
+    /* border:2px solid blue; */
+    display:flex;
+    flex-wrap:wrap;
+}
+#product_image{
+    height:60vh;
+    width:30vw;
+    /* border:2px solid yellow; */
+}
+#product_details{
+    height:60vh;
+    width:70vw;
+    /* border:2px solid pink; */
+}

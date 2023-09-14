@@ -2,8 +2,10 @@ package com.project.productcommunitywebsite.ProductCommunityApplicationBackend.c
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -134,6 +136,23 @@ public class ProductsController {
 		
 	}
 	
+	@GetMapping("brands")
+	@CrossOrigin("*")
+	public ResponseEntity<Set<String>> getProductBrands() {
+		try {
+			List<Products> products=productsService.getProducts();
+			if(products.size()==0) {
+				return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+			}
+			Set<String>brands=new HashSet<>();
+			for(Products product:products) {
+				brands.add(product.getProductBrand());
+			}
+			return new ResponseEntity<>(brands,HttpStatus.OK);
+		} catch(Exception e) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+		}
+	}
 	//	Api to upload product image
 
 	@PostMapping("/product/image/uplaod/{id}")
