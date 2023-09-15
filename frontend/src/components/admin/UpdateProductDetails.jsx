@@ -1,15 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from "react-router-dom";
-import axios from "axios";
 import '../../style/admin/AddProducts.css';
 import {
     MDBInput,
     MDBBtn,
     MDBTextArea,
 } from 'mdb-react-ui-kit';
-import Box from '@mui/material/Box';
-import TextField from '@mui/material/TextField';
-import MenuItem from '@mui/material/MenuItem';
+
 import { updateProductDetails,getProductById } from '../../services/productService';
 
 function UpdateProductDetails() {
@@ -17,19 +14,7 @@ function UpdateProductDetails() {
     let [productId, setProductId] = useState(id);
 
     let [product, setProduct] = useState({});
-    let [categories, setCategories] = useState([]);
-
-    useEffect(() => {
-        axios.get('http://localhost:8085/categories').then((response) => {
-            return response.data;
-        }).then((data) => {
-            console.log(data);
-            setCategories(data);
-        }).catch((error) => {
-            console.log(error);
-        })
-    }, [])
-
+    
     useEffect(() => {
         getProductById(productId).then((product) => {
             console.log(product);
@@ -69,32 +54,7 @@ function UpdateProductDetails() {
                         />
                         <MDBInput className='mb-4' type='text' value={product.productBrand} id='product_brand' label='Product Brand' name="product_brand" onChange={(e) => { setProduct({ ...product, productBrand: e.target.value }) }} required />
                         <MDBInput className='mb-4' type='text' value={product.productPrice} id='product_price' label='Product Price' name="product_price" onChange={(e) => { setProduct({ ...product, productPrice: e.target.value }) }} required />
-                        <Box
-                            component="form"
-                            sx={{
-                                '& .MuiTextField-root': { m: 0, width: '100%' },
-                            }}
-                            noValidate
-                            autoComplete="off"
-                        >
-                        <TextField
-                            className='mb-4'
-                            id="product_category"
-                            select
-                            label="Category"
-                            defaultValue='1'
-                            helperText="Please select category"
-                            onChange={(e)=>{
-                                setProduct({...product,category:{categoryId:e.target.value}});
-                            }}
-                        >
-                            {categories.map((category) => (
-                                <MenuItem value={category.categoryId}>
-                                    {category.categoryName}
-                                </MenuItem>
-                            ))}
-                        </TextField>
-                        </Box>
+                        
                         <br />
                         <MDBBtn type='submit' block>
                             Submit

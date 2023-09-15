@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import { getProductById } from '../services/productService';
 import Card from '@mui/material/Card';
 import CardMedia from '@mui/material/CardMedia';
@@ -9,24 +9,50 @@ import {
     MDBBtn
 } from 'mdb-react-ui-kit';
 import "../style/ProductDetails.css";
+import {getUsers } from '../services/UserService';
+import { postReview } from '../services/reviewService';
 
 function ProductDetails() {
-    let { id } = useParams();
-    let [productId, setProductId] = useState(id);
+    let { productId } = useParams();
     let [product, setProduct] = useState({});
-    const [value, setValue] = useState(2);
-
+    let [avgProductRating, setAvgProductRating] = useState(2);
+    let [productRating, setProductRating] = useState();
+    let [review,setReview]=useState({});
+    let [user,setUser]=useState();
     useEffect(() => {
         getProductById(productId).then((product) => {
             setProduct(product);
         }).catch((error) => {
-            window.location.href="/products";
+            window.location.href = "/products";
         })
+
+        let username=localStorage.getItem("username");
+        if(username!=null) {
+            getUsers().then((registeredUsers)=>{
+               let user=registeredUsers.filter((user)=>{
+                    return user.userName===username;
+               })
+               console.log(user);
+               setUser(user);
+            }).catch((error)=>{
+                console.log("error");
+            })
+        }
     }, [productId]);
+
+    let submit=(e)=>{
+        e.preventDefault();
+        console.log(review);
+        postReview(review).then((review)=>{
+            console.log(review);
+        }).catch((error)=>{
+            console.log(error);
+        })
+    }
 
     return (
         <>
-            <div id="main"> 
+            <div id="main">
                 <h1>{product.productName}</h1>
                 <div id="product">
                     <div id="product_image">
@@ -63,7 +89,7 @@ function ProductDetails() {
                                 <br />
                                 <h6>Brand</h6>
                                 <Typography variant="body2" color="text.secondary">
-                                    {product.productImage}
+                                    {product.productBrand}
                                 </Typography>
 
                                 <br />
@@ -85,7 +111,7 @@ function ProductDetails() {
                                         '& > legend': { mt: 2 },
                                     }}
                                 >
-                                    <Rating name="read-only" value={value} readOnly />
+                                    <Rating name="read-only" value={avgProductRating} readOnly />
                                 </Box>
                             </CardContent>
                         </Card>
@@ -94,24 +120,30 @@ function ProductDetails() {
                 </div>
                 <div className="container mt-4">
                     <h3>Please give us your valuable feedback</h3>
-                    <form >
+                    <form onSubmit={submit}>
                         <MDBTextArea
                             className='mb-4'
                             label='Product Description'
                             id='product_desc'
                             name="product_desc"
+                            onChange={(e)=>setReview({...review,review:e.target.value,isApproved:true,product:{productId:productId},user:{userId:user[0].userId}})}
                             required
                         />
                         <Rating
                             name="simple-controlled"
-                            value={value}
-                            onChange={(event, newValue) => {
-                                setValue(newValue);
+                            value={productRating}
+                            onChange={(e) => {
+                                setProductRating(e.target.value);
+                                setReview({...review,rating:e.target.value});
                             }}
                         />
-                        <MDBBtn type='submit' block>
-                            Submit
-                        </MDBBtn>
+                        {
+                            localStorage.getItem("username") ? <MDBBtn type='submit' block>
+                                Submit
+                            </MDBBtn> : <Link to="/login/user"><MDBBtn block>
+                                Please login to continue
+                            </MDBBtn></Link>
+                        }
                     </form>
                 </div>
             </div>

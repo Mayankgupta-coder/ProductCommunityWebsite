@@ -14,7 +14,6 @@ import org.springframework.web.multipart.MultipartFile;
 import com.project.productcommunitywebsite.ProductCommunityApplicationBackend.dao.ProductsDao;
 import com.project.productcommunitywebsite.ProductCommunityApplicationBackend.entities.Categories;
 import com.project.productcommunitywebsite.ProductCommunityApplicationBackend.entities.Products;
-import com.project.productcommunitywebsite.ProductCommunityApplicationBackend.model.Brands;
 
 @Service
 public class ProductsServiceImpl implements ProductsService {

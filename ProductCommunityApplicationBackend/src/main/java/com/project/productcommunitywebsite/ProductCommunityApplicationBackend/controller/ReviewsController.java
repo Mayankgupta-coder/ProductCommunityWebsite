@@ -29,6 +29,7 @@ public class ReviewsController {
 	@CrossOrigin("*")
 	public ResponseEntity<Reviews> addReview(@RequestBody Reviews review) {
 		try {
+			review.setApproved(true);
 			Reviews addedReview=reviewsService.addReviews(review);
 			return ResponseEntity.of(Optional.of(addedReview));
 		}catch(Exception e) {

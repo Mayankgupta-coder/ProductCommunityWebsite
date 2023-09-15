@@ -29,7 +29,7 @@ function Products() {
 
     useEffect(() => {
         if (brands.length > 0) {
-            filterProductsByBrand(brands,id).then((product) => {
+            filterProductsByBrand(brands, id).then((product) => {
                 setProducts(product);
             }).catch((error) => {
                 console.log(error);
@@ -52,7 +52,7 @@ function Products() {
                 })
             }
         }
-    }, [brands,id]);
+    }, [brands, id]);
 
     let selectBrand = (e) => {
         if (e.target.checked) {
@@ -71,71 +71,76 @@ function Products() {
         <>
             <h1>Products</h1>
             <div id="product_page">
-                <div id="filter_product">
-                    <h2>Brands</h2>
-                    <br />
-                    {
-                        uniqueBrand.map((brand, index) => {
-                            return (
-                                <>
-                                    <MDBCheckbox onChange={selectBrand} key={index} name='flexCheck' value={brand} id='flexCheckDefault' label={brand} />
-                                </>
-                            )
-                        })
-                    }
+                {
+                    products.length > 0 ? (<>
+                        <div id="filter_product">
+                            <h2>Brands</h2>
+                            <br />
+                            {
+                                uniqueBrand.map((brand, index) => {
+                                    return (
+                                        <>
+                                            <MDBCheckbox onChange={selectBrand} key={index} name='flexCheck' value={brand} id='flexCheckDefault' label={brand} />
+                                        </>
+                                    )
+                                })
+                            }
 
-                </div>
-                <div id="products">
-                    {products.map((product) => {
-                        return (<>
-                            <Card sx={{ width: 300, marginRight: '2%', marginBottom: '2%' }}>
-                                <CardActionArea>
-                                    {
-                                        product.productImage !== "test" ?
-                                            (<>
-                                                <CardMedia
-                                                    component="img"
-                                                    height="140"
-                                                    image={`/images/products/${product.productImage}`}
-                                                    alt="green iguana"
-                                                />
-                                            </>) :
-                                            (<>
-                                                <CardMedia
-                                                    component="img"
-                                                    height="140"
-                                                    image={`/images/products/default_product_image.jpg`}
-                                                    alt="green iguana"
-                                                />
-                                            </>)
-                                    }
+                        </div>
+                        <div id="products">
+                            {products.map((product) => {
+                                return (<>
+                                    <Card sx={{ width: 300, marginRight: '2%', marginBottom: '2%' }}>
+                                        <CardActionArea>
+                                            {
+                                                product.productImage !== "test" ?
+                                                    (<>
+                                                        <CardMedia
+                                                            component="img"
+                                                            height="140"
+                                                            image={`/images/products/${product.productImage}`}
+                                                            alt="green iguana"
+                                                        />
+                                                    </>) :
+                                                    (<>
+                                                        <CardMedia
+                                                            component="img"
+                                                            height="140"
+                                                            image={`/images/products/default_product_image.jpg`}
+                                                            alt="green iguana"
+                                                        />
+                                                    </>)
+                                            }
 
-                                    <CardContent>
-                                        <span>Product Name:</span>
-                                        <Typography gutterBottom variant="h5" component="div">
-                                            {product.productName}
-                                        </Typography>
-                                        <span>Product Brand:</span>
-                                        <Typography variant="body2" color="text.secondary">
-                                            {product.productBrand}
-                                        </Typography>
-                                        <span>Product Price:</span>
-                                        <Typography variant="body2" color="text.secondary">
-                                            {product.productPrice}
-                                        </Typography>
-                                    </CardContent>
-                                </CardActionArea>
-                                <CardActions>
-                                    <Link to={`/product/${product.productId}`}>
-                                        <Button size="small" color="primary">
-                                            View Product Details
-                                        </Button>
-                                    </Link>
-                                </CardActions>
-                            </Card>
-                        </>)
-                    })}
-                </div>
+                                            <CardContent>
+                                                <span>Product Name:</span>
+                                                <Typography gutterBottom variant="h5" component="div">
+                                                    {product.productName}
+                                                </Typography>
+                                                <span>Product Brand:</span>
+                                                <Typography variant="body2" color="text.secondary">
+                                                    {product.productBrand}
+                                                </Typography>
+                                                <span>Product Price:</span>
+                                                <Typography variant="body2" color="text.secondary">
+                                                    {product.productPrice}
+                                                </Typography>
+                                            </CardContent>
+                                        </CardActionArea>
+                                        <CardActions>
+                                            <Link to={`/product/${product.productId}`}>
+                                                <Button size="small" color="primary">
+                                                    View Product Details
+                                                </Button>
+                                            </Link>
+                                        </CardActions>
+                                    </Card>
+                                </>)
+                            })}
+                        </div>
+                    </>) : (<><h3 style={{ margin: "auto", marginTop: "10%", color: "red" }}>No Products available in this category....</h3></>)
+                }
+
 
             </div>
         </>
