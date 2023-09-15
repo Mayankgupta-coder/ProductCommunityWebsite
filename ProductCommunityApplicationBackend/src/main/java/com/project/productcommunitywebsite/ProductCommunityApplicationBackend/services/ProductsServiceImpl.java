@@ -67,6 +67,14 @@ public class ProductsServiceImpl implements ProductsService {
 		productsDao.deleteById(id);
 	}
 	
+	
+	@Override
+	public List<Products> getProductByBrandAndCategory(ArrayList<String> brand, int id) {
+		List<Products> products=productsDao.findByProductBrandAndCategory(brand,id);
+		return products;
+	}
+	
+
 	@Override
 	public List<Products> getProductByBrand(ArrayList<String> brand) {
 		List<Products> products=productsDao.findByProductBrand(brand);

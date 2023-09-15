@@ -19,7 +19,6 @@ function ProductDetails() {
     useEffect(() => {
         getProductById(productId).then((product) => {
             setProduct(product);
-            console.log(product.productImage);
         }).catch((error) => {
             window.location.href="/products";
         })

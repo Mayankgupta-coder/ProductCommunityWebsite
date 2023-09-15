@@ -1,14 +1,15 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { MDBBtn, MDBTable, MDBTableHead, MDBTableBody } from 'mdb-react-ui-kit';
 import { getProducts } from '../../services/productService';
 
 function ManageProducts() {
     useEffect(() => {
-        let products=getProducts();
-        products.then((product)=>{
+        let products = getProducts();
+        products.then((product) => {
             console.log(product);
             setProducts(product);
-        }).catch((error)=>{
+        }).catch((error) => {
             console.log(error);
         })
     }, [])
@@ -37,21 +38,21 @@ function ManageProducts() {
                                     <tr>
                                         <td>
                                             <div className='d-flex align-items-center'>
-                                                
+
                                                 {
-                                                    product.productImage!=="test"?<img
-                                                    src={`/images/products/${product.productImage}`}
-                                                    alt='product'
-                                                    style={{ width: '45px', height: '45px' }}
-                                                    className='rounded-circle'
-                                                />:<img
-                                                src={`/images/products/default_product_image.jpg`}
-                                                alt='product'
-                                                style={{ width: '45px', height: '45px' }}
-                                                className='rounded-circle'
-                                            />
+                                                    product.productImage !== "test" ? <img
+                                                        src={`/images/products/${product.productImage}`}
+                                                        alt='product'
+                                                        style={{ width: '45px', height: '45px' }}
+                                                        className='rounded-circle'
+                                                    /> : <img
+                                                        src={`/images/products/default_product_image.jpg`}
+                                                        alt='product'
+                                                        style={{ width: '45px', height: '45px' }}
+                                                        className='rounded-circle'
+                                                    />
                                                 }
-                                                
+
                                                 <div className='ms-3'>
                                                     <p className='fw-normal mb-1'>{product.productId}</p>
                                                 </div>
@@ -74,9 +75,11 @@ function ManageProducts() {
                                         </td>
 
                                         <td>
-                                            <MDBBtn color='primary' rounded size='sm'>
-                                                Edit
-                                            </MDBBtn>
+                                            <Link to={`/update/product/${product.productId}`}>
+                                                <MDBBtn color='primary' rounded size='sm'>
+                                                    Edit
+                                                </MDBBtn>
+                                            </Link>
                                         </td>
                                         <td>
                                             <MDBBtn color='danger' rounded size='sm'>

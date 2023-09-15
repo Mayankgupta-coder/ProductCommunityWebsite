@@ -1,7 +1,6 @@
 package com.project.productcommunitywebsite.ProductCommunityApplicationBackend.controller;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -24,6 +23,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.project.productcommunitywebsite.ProductCommunityApplicationBackend.entities.Categories;
 import com.project.productcommunitywebsite.ProductCommunityApplicationBackend.entities.Products;
 import com.project.productcommunitywebsite.ProductCommunityApplicationBackend.model.Brands;
+import com.project.productcommunitywebsite.ProductCommunityApplicationBackend.services.CategoriesServiceImpl;
 import com.project.productcommunitywebsite.ProductCommunityApplicationBackend.services.ProductsServiceImpl;
 
 @RestController
@@ -31,6 +31,8 @@ public class ProductsController {
 
 	@Autowired
 	private ProductsServiceImpl productsService;
+	@Autowired
+	private CategoriesServiceImpl categoriesService;
 	
 	//	Api to add products
 	
@@ -120,11 +122,17 @@ public class ProductsController {
 	
 	//	Api to search products
 
-	@PostMapping("/search/products")
+	@PostMapping("/search/products/{id}")
 	@CrossOrigin("*")
-	public ResponseEntity<List<Products>>searchProduct(@RequestBody Brands brands){
+	public ResponseEntity<List<Products>>searchProduct(@RequestBody Brands brands,@PathVariable("id") int id){
 		try {
-			List<Products> products=productsService.getProductByBrand(brands.getBrands());
+			List<Products>products;
+			if(id>0) {
+				products=productsService.getProductByBrandAndCategory(brands.getBrands(),id);
+			} else {
+				products=productsService.getProductByBrand(brands.getBrands());
+			}
+			
 			if(products.size()==0) {
 				return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
 			}
@@ -136,11 +144,18 @@ public class ProductsController {
 		
 	}
 	
-	@GetMapping("brands")
+	@GetMapping("brands/{id}")
 	@CrossOrigin("*")
-	public ResponseEntity<Set<String>> getProductBrands() {
+	public ResponseEntity<Set<String>> getProductBrands(@PathVariable("id") int id) {
 		try {
-			List<Products> products=productsService.getProducts();
+			List<Products>products;
+			if(id>0)
+			{
+				 products=productsService.getProductsByCategory(categoriesService.getCategory(id));
+			} else {
+				 products=productsService.getProducts();
+			}
+			
 			if(products.size()==0) {
 				return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
 			}

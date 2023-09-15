@@ -5,6 +5,8 @@ import InventoryIcon from '@mui/icons-material/Inventory';
 import ReviewsIcon from '@mui/icons-material/Reviews';
 import CategoryIcon from '@mui/icons-material/Category';
 import axios from "axios";
+import { Link } from 'react-router-dom';
+import { Button } from '@mui/material';
 
 function HomePage() {
     let [categories, setCategories] = useState([]);
@@ -57,7 +59,7 @@ function HomePage() {
                 </div>
 
                 <div id="categories">
-                    <br/>
+                    <br />
                     <h1>Categories</h1>
                     <div id="display_categories">
                         {
@@ -66,12 +68,16 @@ function HomePage() {
                                     <>
                                         <div className="category">
 
-                                            {category.categoryImage!=="test"?(<img className="category_img" src={`images/${category.categoryImage}`} alt="img" />):(<img className="category_img" src={`images/products/default_product_image.jpg`} alt="img" />)}
+                                            {category.categoryImage !== "test" ? (<img className="category_img" src={`images/${category.categoryImage}`} alt="img" />) : (<img className="category_img" src={`images/products/default_product_image.jpg`} alt="img" />)}
 
-                                            <div id="category_name" style={{margin:"auto",marginTop:"5%" }}>
+                                            {/* <div id="category_name" style={{ margin: "auto", marginTop: "5%" }}>
                                                 {category.categoryName}
-                                            </div>
-
+                                            </div> */}
+                                            <Link to={`/products/category/${category.categoryId}`}>
+                                                <Button id="category_name" style={{ marginLeft:"100%", marginTop: "20%" }} size="small" color="primary">
+                                                {category.categoryName}
+                                                </Button>
+                                            </Link>
                                         </div>
                                     </>
                                 )

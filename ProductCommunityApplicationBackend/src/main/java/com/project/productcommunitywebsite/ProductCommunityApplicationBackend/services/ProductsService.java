@@ -21,6 +21,8 @@ public Products addProduct(Products product);
 	
 	public Products updateProduct(Products product,int id);
 	
+	public List<Products> getProductByBrandAndCategory(ArrayList<String> brand,int id);
+	
 	public List<Products> getProductByBrand(ArrayList<String> brand);
 	
 	public void deleteProduct(int id);

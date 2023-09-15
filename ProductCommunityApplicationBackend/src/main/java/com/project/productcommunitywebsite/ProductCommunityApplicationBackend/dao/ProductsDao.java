@@ -13,6 +13,8 @@ import com.project.productcommunitywebsite.ProductCommunityApplicationBackend.en
 public interface ProductsDao extends CrudRepository<Products,Integer>{
 
 	public Products findByProductId(int id);
+	@Query("SELECT p FROM Products p WHERE p.productBrand in :brands and p.category.categoryId=:id")
+	public List<Products> findByProductBrandAndCategory(@Param("brands")ArrayList<String> brand,@Param("id")int id);
 	@Query("SELECT p FROM Products p WHERE p.productBrand in :brands")
 	public List<Products> findByProductBrand(@Param("brands")ArrayList<String> brand);
 	public List<Products> findByCategory(Categories category);

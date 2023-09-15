@@ -6,23 +6,18 @@ import Typography from '@mui/material/Typography';
 import { Button, CardActionArea, CardActions } from '@mui/material';
 import { MDBCheckbox } from 'mdb-react-ui-kit';
 import axios from "axios";
+import { Link, useParams } from 'react-router-dom';
 import '../style/Products.css';
-import { getProducts,filterProductsByBrand } from '../services/productService';
+import { getProducts, filterProductsByBrand, getProductByCategoryId } from '../services/productService';
 
 function Products() {
     let [products, setProducts] = useState([]);
     let [brands, setBrands] = useState([]);
-    let [uniqueBrand,setUniqueBrand]=useState([]);
+    let [uniqueBrand, setUniqueBrand] = useState([]);
+    let { id } = useParams();
 
     useEffect(() => {
-        console.log(process.env.PUBLIC_URL);
-        getProducts().then((product)=>{
-            setProducts(product);
-        }).catch((error)=>{
-            console.log(error);
-        })
-
-        axios.get('http://localhost:8085/brands').then((response) => {
+        axios.get(`http://localhost:8085/brands/${id}`).then((response) => {
             return response.data;
         }).then((data) => {
             console.log(data);
@@ -30,26 +25,36 @@ function Products() {
         }).catch((error) => {
             console.log(error);
         })
-    }, []);
+    }, [id]);
 
     useEffect(() => {
         if (brands.length > 0) {
-            filterProductsByBrand(brands).then((product) => {
+            filterProductsByBrand(brands,id).then((product) => {
                 setProducts(product);
             }).catch((error) => {
                 console.log(error);
             })
         }
         else {
-            getProducts().then((product)=>{
-                setProducts(product);
-            }).catch((error)=>{
-                console.log(error);
-            })
+            if (id !== '0') {
+                getProductByCategoryId(id).then((product) => {
+                    console.log(product);
+                    setProducts(product);
+                }).catch((error) => {
+                    console.log(error);
+                })
+            } else {
+                getProducts().then((product) => {
+                    console.log(product);
+                    setProducts(product);
+                }).catch((error) => {
+                    console.log(error);
+                })
+            }
         }
-    }, [brands]);
+    }, [brands,id]);
 
-    let selectBrand=(e)=> {
+    let selectBrand = (e) => {
         if (e.target.checked) {
             setBrands([...brands, e.target.value]);
         }
@@ -70,7 +75,7 @@ function Products() {
                     <h2>Brands</h2>
                     <br />
                     {
-                        uniqueBrand.map((brand,index) => {
+                        uniqueBrand.map((brand, index) => {
                             return (
                                 <>
                                     <MDBCheckbox onChange={selectBrand} key={index} name='flexCheck' value={brand} id='flexCheckDefault' label={brand} />
@@ -91,7 +96,7 @@ function Products() {
                                                 <CardMedia
                                                     component="img"
                                                     height="140"
-                                                    image={`images/products/${product.productImage}`}
+                                                    image={`/images/products/${product.productImage}`}
                                                     alt="green iguana"
                                                 />
                                             </>) :
@@ -99,14 +104,14 @@ function Products() {
                                                 <CardMedia
                                                     component="img"
                                                     height="140"
-                                                    image={`images/products/default_product_image.jpg`}
+                                                    image={`/images/products/default_product_image.jpg`}
                                                     alt="green iguana"
                                                 />
                                             </>)
                                     }
 
                                     <CardContent>
-                                    <span>Product Name:</span>
+                                        <span>Product Name:</span>
                                         <Typography gutterBottom variant="h5" component="div">
                                             {product.productName}
                                         </Typography>
@@ -121,9 +126,11 @@ function Products() {
                                     </CardContent>
                                 </CardActionArea>
                                 <CardActions>
-                                    <Button size="small" color="primary">
-                                        Share
-                                    </Button>
+                                    <Link to={`/product/${product.productId}`}>
+                                        <Button size="small" color="primary">
+                                            View Product Details
+                                        </Button>
+                                    </Link>
                                 </CardActions>
                             </Card>
                         </>)
@@ -131,9 +138,6 @@ function Products() {
                 </div>
 
             </div>
-
-
-
         </>
     )
 }
