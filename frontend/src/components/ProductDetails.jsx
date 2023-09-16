@@ -70,22 +70,26 @@ function ProductDetails() {
             })
         }
 
-        getAvgProductRating(productId).then((rating)=>{
+        getAvgProductRating(productId).then((rating) => {
             setAvgProductRating(rating);
         }).catch((error) => {
             console.log(error);
         })
-        
+
     }, [productId]);
 
     let submit = (e) => {
         e.preventDefault();
         console.log(review);
-        postReview(review).then((review) => {
-            console.log(review);
-        }).catch((error) => {
-            console.log(error);
-        })
+        if (review.rating > 0) {
+            postReview(review).then((review) => {
+                console.log(review);
+            }).catch((error) => {
+                console.log(error);
+            })
+        } else {
+            console.log("Please rate");
+        }
     }
 
     return (
@@ -176,6 +180,7 @@ function ProductDetails() {
                                     setProductRating(e.target.value);
                                     setReview({ ...review, rating: e.target.value });
                                 }}
+                                required
                             />
                             {
                                 localStorage.getItem("username") ? <MDBBtn type='submit' block>
@@ -191,7 +196,7 @@ function ProductDetails() {
                 <div className="container" id="reviews">
                     <h2 style={{ marginLeft: "40%", marginTop: "3%" }}>Reviews</h2>
                     {
-                        (loggedInUserReview.length>0 || productReviews.length>0)?<div style={{ maxWidth: '22rem' }}>
+                        (loggedInUserReview.length > 0 || productReviews.length > 0) ? <div style={{ maxWidth: '22rem' }}>
                             <MDBListGroup style={{ minWidth: '60rem' }} light className='mb-3'>
                                 {
                                     loggedInUserReview.map((review) => {
@@ -233,7 +238,7 @@ function ProductDetails() {
                                 }
                             </MDBListGroup>
 
-                        </div>:(<h2 style={{color:"red",marginLeft:"30%"}}>*No Reviews for this product</h2>)
+                        </div> : (<h2 style={{ color: "red", marginLeft: "30%" }}>*No Reviews for this product</h2>)
                     }
 
                 </div>

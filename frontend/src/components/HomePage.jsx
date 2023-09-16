@@ -6,13 +6,14 @@ import ReviewsIcon from '@mui/icons-material/Reviews';
 import axios from "axios";
 import { Link } from 'react-router-dom';
 import { Button } from '@mui/material';
-import { getRegisteredUsersCount,getProductsCount,getReviewsCount } from '../services/statsService';
+import Navbar from './Navbar';
+import { getRegisteredUsersCount, getProductsCount, getReviewsCount } from '../services/statsService';
 
 function HomePage() {
     let [categories, setCategories] = useState([]);
-    let [registeredUsersCount,setRegisteredUsersCount]=useState(0);
-    let [productsCount,setProductsCount]=useState(0);
-    let [reviewsCount,setReviewsCount]=useState(0);
+    let [registeredUsersCount, setRegisteredUsersCount] = useState(0);
+    let [productsCount, setProductsCount] = useState(0);
+    let [reviewsCount, setReviewsCount] = useState(0);
     useEffect(() => {
         axios.get('http://localhost:8085/categories').then((response) => {
             return response.data;
@@ -23,27 +24,29 @@ function HomePage() {
             console.log(error);
         })
 
-        getRegisteredUsersCount().then((registeredUsers)=>{
+        getRegisteredUsersCount().then((registeredUsers) => {
             setRegisteredUsersCount(registeredUsers);
-        }).catch((error)=>{
+        }).catch((error) => {
             console.log(error);
         })
 
-        getProductsCount().then((productCount)=>{
+        getProductsCount().then((productCount) => {
             setProductsCount(productCount);
-        }).catch((error)=>{
+        }).catch((error) => {
             console.log(error);
         })
 
-        getReviewsCount().then((reviewCount)=>{
+        getReviewsCount().then((reviewCount) => {
             setReviewsCount(reviewCount);
-        }).catch((error)=>{
+        }).catch((error) => {
             console.log(error);
         })
     }, [])
-    
+
     return (
         <>
+            <Navbar />
+            <br />
             <div id="main">
                 <div id="all_stats">
                     <div className="stats" id="total_users">
@@ -88,8 +91,8 @@ function HomePage() {
                                                 {category.categoryName}
                                             </div> */}
                                             <Link to={`/products/category/${category.categoryId}`}>
-                                                <Button id="category_name" style={{ marginLeft:"100%", marginTop: "20%" }} size="small" color="primary">
-                                                {category.categoryName}
+                                                <Button id="category_name" style={{ marginLeft: "100%", marginTop: "20%" }} size="small" color="primary">
+                                                    {category.categoryName}
                                                 </Button>
                                             </Link>
                                         </div>

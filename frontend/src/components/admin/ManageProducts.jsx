@@ -75,7 +75,7 @@ function ManageProducts() {
                                         </td>
 
                                         <td>
-                                            <Link to={`/update/product/${product.productId}`}>
+                                            <Link to={`/admin/update/product/${product.productId}`}>
                                                 <MDBBtn color='primary' rounded size='sm'>
                                                     Edit
                                                 </MDBBtn>

@@ -9,6 +9,7 @@ import ProductDetails from './components/ProductDetails';
 import UpdateProductDetails from './components/admin/UpdateProductDetails';
 import UserRegistration from './components/UserRegistration';
 import UserLogin from './components/UserLogin';
+import Admin from './components/admin/Admin';
 
 function App() {
   return (
@@ -18,13 +19,15 @@ function App() {
             <Route exact path='/' element={<HomePage/>}></Route>
             <Route exact path='/products/category/:id' element={<Products/>}></Route>
             <Route exact path='/product/:productId' element={<ProductDetails/>}></Route>
-            <Route exact path='/add/category' element={<AddCategories />}></Route>
-            <Route exact path='/add/product' element={<AddProducts />}></Route>
-            <Route exact path='/manage/product' element={<ManageProducts />}></Route>
-            <Route exact path='/manage/category' element={<ManageCategories />}></Route>
-            <Route exact path='/update/product/:id' element={<UpdateProductDetails />}></Route>
             <Route exact path='/register/user' element={<UserRegistration />}></Route>
             <Route exact path='/login/user' element={<UserLogin />}></Route>
+            <Route exact path='/admin' element={<Admin />}>
+              <Route exact path='add/category' element={<AddCategories />}></Route>
+              <Route exact path='add/product' element={<AddProducts />}></Route>
+              <Route exact path='manage/product' element={<ManageProducts />}></Route>
+              <Route exact path='manage/category' element={<ManageCategories />}></Route>
+              <Route exact path='update/product/:id' element={<UpdateProductDetails />}></Route>
+            </Route>
           </Routes>
       </Router>
     </>

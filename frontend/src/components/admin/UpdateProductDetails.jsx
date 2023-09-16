@@ -38,7 +38,7 @@ function UpdateProductDetails() {
     return (
         <>
             <div id="main">
-                <h1>Add Product</h1>
+                <h1>Update Product Details</h1>
                 <div id="add_product_form">
                     <form onSubmit={submit}>
                         <MDBInput className='mb-4' type='text' value={product.productId} id='product_id' label='Product ID' name="product_id" onChange={(e) => { setProduct({ ...product, productId: e.target.value }) }} readonly required />
