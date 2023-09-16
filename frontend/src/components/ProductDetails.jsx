@@ -6,19 +6,27 @@ import CardMedia from '@mui/material/CardMedia';
 import { CardActionArea, CardContent, Typography, Box, Rating } from '@mui/material';
 import {
     MDBTextArea,
-    MDBBtn
+    MDBBtn,
+    MDBListGroup,
+    MDBListGroupItem,
+    MDBBadge
 } from 'mdb-react-ui-kit';
 import "../style/ProductDetails.css";
-import {getUsers } from '../services/UserService';
-import { postReview } from '../services/reviewService';
+import { getUsers } from '../services/UserService';
+import { postReview, getReviews } from '../services/reviewService';
+import Navbar from './Navbar';
+import { getAvgProductRating } from '../services/statsService';
 
 function ProductDetails() {
     let { productId } = useParams();
     let [product, setProduct] = useState({});
-    let [avgProductRating, setAvgProductRating] = useState(2);
+    let [avgProductRating, setAvgProductRating] = useState(0);
     let [productRating, setProductRating] = useState();
-    let [review,setReview]=useState({});
-    let [user,setUser]=useState();
+    let [review, setReview] = useState({});
+    let [user, setUser] = useState();
+    let [productReviews, setProductReviews] = useState([]);
+    let [loggedInUserReview, setLoggedInUserReview] = useState([]);
+
     useEffect(() => {
         getProductById(productId).then((product) => {
             setProduct(product);
@@ -26,32 +34,64 @@ function ProductDetails() {
             window.location.href = "/products";
         })
 
-        let username=localStorage.getItem("username");
-        if(username!=null) {
-            getUsers().then((registeredUsers)=>{
-               let user=registeredUsers.filter((user)=>{
-                    return user.userName===username;
-               })
-               console.log(user);
-               setUser(user);
-            }).catch((error)=>{
+        let username = localStorage.getItem("username");
+        if (username != null) {
+            getUsers().then((registeredUsers) => {
+                let user = registeredUsers.filter((user) => {
+                    return user.userName === username;
+                })
+                console.log(user);
+                setUser(user);
+            }).catch((error) => {
                 console.log("error");
             })
         }
+
+        if (username != null) {
+            getReviews().then((reviews) => {
+                setLoggedInUserReview(reviews.filter((review) => {
+                    return review.user.userName === username && review.product.productId === parseInt(productId);
+                }));
+                setProductReviews(reviews.filter((review) => {
+                    return review.product.productId === parseInt(productId) && review.user.userName !== username;
+                }));
+
+            }).catch((error) => {
+                console.log(error);
+            })
+        } else {
+            getReviews().then((reviews) => {
+                setProductReviews(reviews.filter((review) => {
+                    return review.product.productId === parseInt(productId);
+                }));
+
+            }).catch((error) => {
+                console.log(error);
+            })
+        }
+
+        getAvgProductRating(productId).then((rating)=>{
+            setAvgProductRating(rating);
+        }).catch((error) => {
+            console.log(error);
+        })
+        
     }, [productId]);
 
-    let submit=(e)=>{
+    let submit = (e) => {
         e.preventDefault();
         console.log(review);
-        postReview(review).then((review)=>{
+        postReview(review).then((review) => {
             console.log(review);
-        }).catch((error)=>{
+        }).catch((error) => {
             console.log(error);
         })
     }
 
     return (
         <>
+            <Navbar />
+            <br />
             <div id="main">
                 <h1>{product.productName}</h1>
                 <div id="product">
@@ -80,7 +120,6 @@ function ProductDetails() {
                                         </>)
                                 }
                             </CardActionArea>
-
                         </Card>
                     </div>
                     <div id="product_details">
@@ -118,33 +157,85 @@ function ProductDetails() {
                     </div>
 
                 </div>
-                <div className="container mt-4">
-                    <h3>Please give us your valuable feedback</h3>
-                    <form onSubmit={submit}>
-                        <MDBTextArea
-                            className='mb-4'
-                            label='Product Description'
-                            id='product_desc'
-                            name="product_desc"
-                            onChange={(e)=>setReview({...review,review:e.target.value,isApproved:true,product:{productId:productId},user:{userId:user[0].userId}})}
-                            required
-                        />
-                        <Rating
-                            name="simple-controlled"
-                            value={productRating}
-                            onChange={(e) => {
-                                setProductRating(e.target.value);
-                                setReview({...review,rating:e.target.value});
-                            }}
-                        />
-                        {
-                            localStorage.getItem("username") ? <MDBBtn type='submit' block>
-                                Submit
-                            </MDBBtn> : <Link to="/login/user"><MDBBtn block>
-                                Please login to continue
-                            </MDBBtn></Link>
-                        }
-                    </form>
+                {
+                    loggedInUserReview.length === 0 ? (<div className="container mt-4">
+                        <h3>Please give us your valuable feedback</h3>
+                        <form onSubmit={submit}>
+                            <MDBTextArea
+                                className='mb-4'
+                                label='Product Description'
+                                id='product_desc'
+                                name="product_desc"
+                                onChange={(e) => setReview({ ...review, review: e.target.value, isApproved: true, product: { productId: productId }, user: { userId: user[0].userId } })}
+                                required
+                            />
+                            <Rating
+                                name="simple-controlled"
+                                value={productRating}
+                                onChange={(e) => {
+                                    setProductRating(e.target.value);
+                                    setReview({ ...review, rating: e.target.value });
+                                }}
+                            />
+                            {
+                                localStorage.getItem("username") ? <MDBBtn type='submit' block>
+                                    Submit
+                                </MDBBtn> : <Link to="/login/user"><MDBBtn block>
+                                    Please login to continue
+                                </MDBBtn></Link>
+                            }
+                        </form>
+                    </div>) : (null)
+                }
+
+                <div className="container" id="reviews">
+                    <h2 style={{ marginLeft: "40%", marginTop: "3%" }}>Reviews</h2>
+                    {
+                        (loggedInUserReview.length>0 || productReviews.length>0)?<div style={{ maxWidth: '22rem' }}>
+                            <MDBListGroup style={{ minWidth: '60rem' }} light className='mb-3'>
+                                {
+                                    loggedInUserReview.map((review) => {
+                                        return (
+                                            <MDBListGroupItem>
+                                                <h5 className='fw-bold'>{review.user.userName}</h5>
+                                                <MDBBadge className='mb-2' pill light color='success'>
+                                                    Your Review
+                                                </MDBBadge>
+                                                <p className='text-muted mb-2 fw-bold'>
+                                                    <Rating
+                                                        name="simple-controlled"
+                                                        value={review.rating}
+                                                        readOnly
+                                                    /></p>
+                                                <p className='text-muted mb-0'>
+                                                    {review.review}
+                                                </p>
+                                            </MDBListGroupItem>
+                                        )
+                                    })
+                                }
+                                {
+                                    productReviews.map((review) => {
+                                        return (
+                                            <MDBListGroupItem>
+                                                <h5 className='fw-bold'>{review.user.userName}</h5>
+                                                <p className='text-muted mb-2 fw-bold'><Rating
+                                                    name="simple-controlled"
+                                                    value={review.rating}
+                                                    readOnly
+                                                /></p>
+                                                <p className='text-muted mb-0'>
+                                                    {review.review}
+                                                </p>
+                                            </MDBListGroupItem>
+                                        )
+                                    })
+                                }
+                            </MDBListGroup>
+
+                        </div>:(<h2 style={{color:"red",marginLeft:"30%"}}>*No Reviews for this product</h2>)
+                    }
+
                 </div>
             </div>
         </>

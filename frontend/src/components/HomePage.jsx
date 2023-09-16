@@ -3,13 +3,16 @@ import '../style/HomePage.css'
 import PersonIcon from '@mui/icons-material/Person';
 import InventoryIcon from '@mui/icons-material/Inventory';
 import ReviewsIcon from '@mui/icons-material/Reviews';
-import CategoryIcon from '@mui/icons-material/Category';
 import axios from "axios";
 import { Link } from 'react-router-dom';
 import { Button } from '@mui/material';
+import { getRegisteredUsersCount,getProductsCount,getReviewsCount } from '../services/statsService';
 
 function HomePage() {
     let [categories, setCategories] = useState([]);
+    let [registeredUsersCount,setRegisteredUsersCount]=useState(0);
+    let [productsCount,setProductsCount]=useState(0);
+    let [reviewsCount,setReviewsCount]=useState(0);
     useEffect(() => {
         axios.get('http://localhost:8085/categories').then((response) => {
             return response.data;
@@ -19,7 +22,26 @@ function HomePage() {
         }).catch((error) => {
             console.log(error);
         })
+
+        getRegisteredUsersCount().then((registeredUsers)=>{
+            setRegisteredUsersCount(registeredUsers);
+        }).catch((error)=>{
+            console.log(error);
+        })
+
+        getProductsCount().then((productCount)=>{
+            setProductsCount(productCount);
+        }).catch((error)=>{
+            console.log(error);
+        })
+
+        getReviewsCount().then((reviewCount)=>{
+            setReviewsCount(reviewCount);
+        }).catch((error)=>{
+            console.log(error);
+        })
     }, [])
+    
     return (
         <>
             <div id="main">
@@ -27,7 +49,7 @@ function HomePage() {
                     <div className="stats" id="total_users">
                         <div className="icon"><PersonIcon fontSize="large" /></div>
                         <div className="stat">
-                            0
+                            {registeredUsersCount}
                             <br />
                             Users
                         </div>
@@ -35,23 +57,15 @@ function HomePage() {
                     <div className="stats" id="total_products">
                         <div className="icon"><InventoryIcon fontSize="large" /></div>
                         <div className="stat">
-                            0
+                            {productsCount}
                             <br />
                             Products
-                        </div>
-                    </div>
-                    <div className="stats" id="total_categories">
-                        <div className="icon">< CategoryIcon fontSize="large" /></div>
-                        <div className="stat">
-                            0
-                            <br />
-                            Categories
                         </div>
                     </div>
                     <div className="stats" id="total_reviews">
                         <div className="icon"><ReviewsIcon fontSize="large" /></div>
                         <div className="stat">
-                            0
+                            {reviewsCount}
                             <br />
                             Reviews
                         </div>

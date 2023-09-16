@@ -5,4 +5,8 @@ let postReview=async(review)=>{
     return response.data;
 }
 
-export {postReview};
+let getReviews=async()=>{
+    let response=await axios.get('http://localhost:8085/reviews');
+    return response.data;
+}
+export {postReview,getReviews};
