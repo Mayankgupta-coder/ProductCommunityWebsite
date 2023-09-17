@@ -10,8 +10,12 @@ let getUsers=async()=>{
     return response.data;
 }
 
-let isLoggedIn=()=>{
+let isUserLoggedIn=()=>{
     return localStorage.getItem("username")!==null;
 }
 
-export {registerUser,getUsers,isLoggedIn};
+let logoutUser=()=>{
+    localStorage.removeItem("username");
+}
+
+export {registerUser,getUsers,isUserLoggedIn,logoutUser};

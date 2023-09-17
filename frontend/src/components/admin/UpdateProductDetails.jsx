@@ -6,21 +6,25 @@ import {
     MDBBtn,
     MDBTextArea,
 } from 'mdb-react-ui-kit';
-
-import { updateProductDetails,getProductById } from '../../services/productService';
+import Alert from '@mui/material/Alert';
+import IconButton from '@mui/material/IconButton';
+import Collapse from '@mui/material/Collapse';
+import CloseIcon from '@mui/icons-material/Close';
+import Box from '@mui/material/Box';
+import { updateProductDetails, getProductById } from '../../services/productService';
 
 function UpdateProductDetails() {
-    let { id } = useParams();
-    let [productId, setProductId] = useState(id);
+    let { productId } = useParams();
 
     let [product, setProduct] = useState({});
-    
+    const [open, setOpen] = useState(false);
+
     useEffect(() => {
         getProductById(productId).then((product) => {
             console.log(product);
             setProduct(product);
         }).catch((error) => {
-            window.location.href="/products";
+            window.location.href = "/products";
         })
     }, [productId]);
 
@@ -31,18 +35,43 @@ function UpdateProductDetails() {
 
         updateProductDetails(product).then((product) => {
             console.log(product);
+            setOpen(true);
+            setTimeout(()=>{
+                window.location.href="/admin/manage/product"
+            },2000)
         }).catch((error) => {
             console.log(error);
         })
     }
     return (
         <>
+            <Box sx={{ width: '100%' }}>
+                <Collapse in={open}>
+                    <Alert
+                        action={
+                            <IconButton
+                                aria-label="close"
+                                color="inherit"
+                                size="small"
+                                onClick={() => {
+                                    setOpen(false);
+                                }}
+                            >
+                                <CloseIcon fontSize="inherit" />
+                            </IconButton>
+                        }
+                        sx={{ mb: 2 }}
+                    >
+                        Close me!
+                    </Alert>
+                </Collapse>
+            </Box>
             <div id="main">
                 <h1>Update Product Details</h1>
                 <div id="add_product_form">
                     <form onSubmit={submit}>
                         <MDBInput className='mb-4' type='text' value={product.productId} id='product_id' label='Product ID' name="product_id" onChange={(e) => { setProduct({ ...product, productId: e.target.value }) }} readonly required />
-                        <MDBInput className='mb-4' type='text' value={product.productName} id='product_name' label='Product Name' name="product_name" onChange={(e) => { setProduct({ ...product, productName: e.target.value}) }} readonly required />
+                        <MDBInput className='mb-4' type='text' value={product.productName} id='product_name' label='Product Name' name="product_name" onChange={(e) => { setProduct({ ...product, productName: e.target.value }) }} readonly required />
                         <MDBTextArea
                             className='mb-4'
                             label='Product Description'
@@ -54,7 +83,7 @@ function UpdateProductDetails() {
                         />
                         <MDBInput className='mb-4' type='text' value={product.productBrand} id='product_brand' label='Product Brand' name="product_brand" onChange={(e) => { setProduct({ ...product, productBrand: e.target.value }) }} required />
                         <MDBInput className='mb-4' type='text' value={product.productPrice} id='product_price' label='Product Price' name="product_price" onChange={(e) => { setProduct({ ...product, productPrice: e.target.value }) }} required />
-                        
+
                         <br />
                         <MDBBtn type='submit' block>
                             Submit

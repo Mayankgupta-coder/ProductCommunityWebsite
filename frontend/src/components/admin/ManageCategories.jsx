@@ -3,6 +3,8 @@ import axios from "axios";
 import { MDBBtn, MDBTable, MDBTableHead, MDBTableBody } from 'mdb-react-ui-kit';
 
 function ManageCategories() {
+    let [categories, setCategories] = useState([]);
+    
     useEffect(() => {
         axios.get('http://localhost:8085/categories').then((response) => {
             return response.data;
@@ -14,7 +16,7 @@ function ManageCategories() {
         })
     }, [])
 
-    let [categories, setCategories] = useState([]);
+   
     return (
         <>
             <h1>Manage Category Details</h1>

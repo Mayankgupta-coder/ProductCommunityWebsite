@@ -9,6 +9,9 @@ import {
 
 function AddCategories() {
 
+    let [category, setCategory] = useState({});
+    let [categoryImage, setCategoryImage] = useState();
+    
     useEffect(() => {
         axios.get('http://localhost:8085/categories').then((response) => {
             return response.data;
@@ -19,8 +22,6 @@ function AddCategories() {
         })
     }, [])
 
-    let [category, setCategory] = useState({});
-    let [categoryImage, setCategoryImage] = useState();
 
     let submit = (e) => {
         e.preventDefault();

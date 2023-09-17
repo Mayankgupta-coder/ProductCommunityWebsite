@@ -3,7 +3,10 @@ import { Link } from 'react-router-dom';
 import { MDBBtn, MDBTable, MDBTableHead, MDBTableBody } from 'mdb-react-ui-kit';
 import { getProducts } from '../../services/productService';
 
+
 function ManageProducts() {
+    let [products, setProducts] = useState([]);
+    
     useEffect(() => {
         let products = getProducts();
         products.then((product) => {
@@ -14,10 +17,21 @@ function ManageProducts() {
         })
     }, [])
 
-    let [products, setProducts] = useState([]);
+    // let deleteProduct=()=>{
+    //     axios.delete(`http://localhost:8085/products/0`).then((response)=>{
+    //         return response.data;
+    //     }).then((res)=>{
+    //         console.log(res);
+    //     }).catch((error)=>{
+    //         console.log(error);
+    //     })
+    // }
+
+    
     return (
         <>
             <h1>Manage Product Details</h1>
+            
             <MDBTable align='middle' className="container">
                 <MDBTableHead>
                     <tr>

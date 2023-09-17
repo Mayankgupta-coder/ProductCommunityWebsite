@@ -7,6 +7,9 @@ import "../style/UserRegistration.css";
 import {getUsers } from '../services/UserService';
 
 function UserLogin() {
+    let [user, setUser] = useState({});
+    let [registeredUsers, setRegisteredUsers] = useState([]);
+
     useEffect(() => {
         getUsers().then((users) => {
             console.log(users);
@@ -15,9 +18,6 @@ function UserLogin() {
             console.log(error);
         })
     }, [])
-
-    let [user, setUser] = useState({});
-    let [registeredUsers, setRegisteredUsers] = useState({});
 
     let submit = (e) => {
         e.preventDefault();

@@ -7,6 +7,10 @@ import "../style/UserRegistration.css";
 import { registerUser,getUsers } from '../services/UserService';
 
 function UserRegistration() {
+    let [user,setUser]=useState({});
+    let [registeredUsers,setRegisteredUsers]=useState([]);
+    let [repeatedPassword,setRepeatedPassword]=useState("");
+
     useEffect(()=>{
         getUsers().then((users)=>{
             console.log(users);
@@ -15,10 +19,6 @@ function UserRegistration() {
             console.log(error);
         })
     },[])
-
-    let [user,setUser]=useState({});
-    let [registeredUsers,setRegisteredUsers]=useState({});
-    let [repeatedPassword,setRepeatedPassword]=useState("");
 
     let submit=(e)=>{
         e.preventDefault();

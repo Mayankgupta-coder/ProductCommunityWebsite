@@ -14,6 +14,10 @@ import { addProduct,uploadProductImage } from '../../services/productService';
 
 function AddProducts() {
 
+    let [product, setProduct] = useState({});
+    let [productImage, setProductImage] = useState();
+    let [categories, setCategories] = useState([]);
+
     useEffect(() => {
         axios.get('http://localhost:8085/categories').then((response) => {
             return response.data;
@@ -25,10 +29,7 @@ function AddProducts() {
         })
     }, [])
 
-    let [product, setProduct] = useState({});
-    let [productImage, setProductImage] = useState();
-    let [categories, setCategories] = useState([]);
-
+    
     let submit = (e) => {
         e.preventDefault();
         console.log("submit");
