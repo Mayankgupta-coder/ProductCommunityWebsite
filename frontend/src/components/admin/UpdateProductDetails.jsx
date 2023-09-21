@@ -11,6 +11,7 @@ import IconButton from '@mui/material/IconButton';
 import Collapse from '@mui/material/Collapse';
 import CloseIcon from '@mui/icons-material/Close';
 import Box from '@mui/material/Box';
+import Navbar from '../Navbar';
 import { updateProductDetails, getProductById } from '../../services/productService';
 
 function UpdateProductDetails() {
@@ -66,6 +67,8 @@ function UpdateProductDetails() {
                     </Alert>
                 </Collapse>
             </Box>
+            <Navbar/>
+            <br/>
             <div id="main">
                 <h1>Update Product Details</h1>
                 <div id="add_product_form">

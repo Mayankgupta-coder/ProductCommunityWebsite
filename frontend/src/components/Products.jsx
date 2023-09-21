@@ -8,6 +8,7 @@ import { MDBCheckbox } from 'mdb-react-ui-kit';
 import axios from "axios";
 import { Link, useParams } from 'react-router-dom';
 import '../style/Products.css';
+import Navbar from './Navbar';
 import { getProducts, filterProductsByBrand, getProductByCategoryId } from '../services/productService';
 
 function Products() {
@@ -69,6 +70,8 @@ function Products() {
     }
     return (
         <>
+            <Navbar />
+            <br />
             <h1>Products</h1>
             <div id="product_page">
                 {

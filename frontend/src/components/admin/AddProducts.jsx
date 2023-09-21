@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import { useNavigate } from "react-router-dom";
 import '../../style/admin/AddProducts.css';
 import axios from "axios";
 import {
@@ -10,13 +11,21 @@ import {
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import MenuItem from '@mui/material/MenuItem';
-import { addProduct,uploadProductImage } from '../../services/productService';
+import Alert from '@mui/material/Alert';
+import IconButton from '@mui/material/IconButton';
+import Collapse from '@mui/material/Collapse';
+import CloseIcon from '@mui/icons-material/Close';
+import { addProduct, uploadProductImage,getProducts } from '../../services/productService';
+import Navbar from '../Navbar';
 
 function AddProducts() {
 
     let [product, setProduct] = useState({});
+    let [allProducts, setAllProducts] = useState([]);
     let [productImage, setProductImage] = useState();
     let [categories, setCategories] = useState([]);
+    const [successAlertOpen, setSuccessAlertOpen] = useState(false);
+    const [errorAlertOpen, setErrorAlertOpen] = useState(false);
 
     useEffect(() => {
         axios.get('http://localhost:8085/categories').then((response) => {
@@ -27,9 +36,17 @@ function AddProducts() {
         }).catch((error) => {
             console.log(error);
         })
+
+        getProducts().then((products)=>{
+            console.log(products);
+            setAllProducts(products);
+        }).catch((error) => {
+            console.log(error);
+        })
     }, [])
 
-    
+    const navigate = useNavigate();
+
     let submit = (e) => {
         e.preventDefault();
         console.log("submit");
@@ -38,19 +55,79 @@ function AddProducts() {
         const formData = new FormData();
         formData.append('productImage', productImage.productImage);
 
-        addProduct(product).then((product) => {
-            console.log(product);
-            uploadProductImage(product.productId,formData).then((productImage) => {
-                console.log(productImage);
+        let isProductAlreadyExist=allProducts.filter((myProduct)=>{
+            return myProduct.productId===Number(product.productId);
+        })
+        
+        if(isProductAlreadyExist.length>0)
+        {
+            setErrorAlertOpen(true);
+        } else {
+            addProduct(product).then((product) => {
+                console.log(product);
+                uploadProductImage(product.productId, formData).then((productImage) => {
+                    console.log(productImage);
+                    setSuccessAlertOpen(true);
+                    setTimeout(() => {
+                        navigate("/admin/manage/product");
+                    }, 2000)
+                }).catch((error) => {
+                    console.log(error);
+                    setErrorAlertOpen(true);
+                })
             }).catch((error) => {
                 console.log(error);
+                setErrorAlertOpen(true);
             })
-        }).catch((error) => {
-            console.log(error);
-        })
+        }
+        
     }
     return (
         <>
+            <Box sx={{ width: '100%' }}>
+                <Collapse in={successAlertOpen}>
+                    <Alert severity="success"
+                        action={
+                            <IconButton
+                                aria-label="close"
+                                color="inherit"
+                                size="small"
+                                onClick={() => {
+                                    setSuccessAlertOpen(false);
+                                }}
+                            >
+                                <CloseIcon fontSize="inherit" />
+                            </IconButton>
+                        }
+                        sx={{ mb: 2 }}
+                    >
+                        Product Added Successfully!
+                    </Alert>
+                </Collapse>
+            </Box>
+            <Box sx={{ width: '100%' }}>
+                <Collapse in={errorAlertOpen}>
+                    <Alert severity="error"
+                        action={
+                            <IconButton
+                                aria-label="close"
+                                color="inherit"
+                                size="small"
+                                onClick={() => {
+                                    setErrorAlertOpen(false);
+                                }}
+                            >
+                                <CloseIcon fontSize="inherit" />
+                            </IconButton>
+                        }
+                        sx={{ mb: 2 }}
+                    >
+                        Some Error Occured! Please Try Again!
+                    </Alert>
+                </Collapse>
+            </Box>
+            <Navbar />
+            <br />
             <div id="main">
                 <h1>Add Product</h1>
                 <div id="add_product_form">
@@ -75,25 +152,25 @@ function AddProducts() {
                             noValidate
                             autoComplete="off"
                         >
-                        <TextField
-                            className='mb-4'
-                            id="product_category"
-                            select
-                            label="Category"
-                            defaultValue="1"
-                            helperText="Please select category"
-                            onChange={(e)=>{
-                                setProduct({...product,category:{categoryId:e.target.value}});
-                            }}
-                        >
-                            {categories.map((category) => (
-                                <MenuItem value={category.categoryId}>
-                                    {category.categoryName}
-                                </MenuItem>
-                            ))}
-                        </TextField>
+                            <TextField
+                                className='mb-4'
+                                id="product_category"
+                                select
+                                label="Category"
+                                defaultValue="1"
+                                helperText="Please select category"
+                                onChange={(e) => {
+                                    setProduct({ ...product, category: { categoryId: e.target.value } });
+                                }}
+                            >
+                                {categories.map((category) => (
+                                    <MenuItem value={category.categoryId}>
+                                        {category.categoryName}
+                                    </MenuItem>
+                                ))}
+                            </TextField>
                         </Box>
-                    
+
                         <MDBFile label='Product Image' id='upload_product_image' name="product_image" onChange={(e) => { setProductImage({ productImage: e.target.files[0] }) }} required />
                         <br />
                         <MDBBtn type='submit' block>

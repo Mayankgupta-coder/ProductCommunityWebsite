@@ -16,6 +16,7 @@ let isUserLoggedIn=()=>{
 
 let logoutUser=()=>{
     localStorage.removeItem("username");
+    window.location.href="/";
 }
 
 export {registerUser,getUsers,isUserLoggedIn,logoutUser};

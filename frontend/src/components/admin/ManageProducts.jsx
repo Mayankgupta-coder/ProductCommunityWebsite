@@ -2,11 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { MDBBtn, MDBTable, MDBTableHead, MDBTableBody } from 'mdb-react-ui-kit';
 import { getProducts } from '../../services/productService';
-
+import Navbar from '../Navbar';
 
 function ManageProducts() {
     let [products, setProducts] = useState([]);
-    
+
     useEffect(() => {
         let products = getProducts();
         products.then((product) => {
@@ -27,11 +27,13 @@ function ManageProducts() {
     //     })
     // }
 
-    
+
     return (
         <>
+            <Navbar />
+            <br />
             <h1>Manage Product Details</h1>
-            
+
             <MDBTable align='middle' className="container">
                 <MDBTableHead>
                     <tr>

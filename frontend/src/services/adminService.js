@@ -11,6 +11,7 @@ let isAdminLoggedIn=()=>{
 
 let logoutAdmin=()=>{
     localStorage.removeItem("admin");
+    window.location.href="/";
 }
 
 export {getAdmin,isAdminLoggedIn,logoutAdmin}
