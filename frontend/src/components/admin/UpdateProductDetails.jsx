@@ -63,7 +63,7 @@ function UpdateProductDetails() {
                         }
                         sx={{ mb: 2 }}
                     >
-                        Close me!
+                        Product Details Updated Successfully!
                     </Alert>
                 </Collapse>
             </Box>
