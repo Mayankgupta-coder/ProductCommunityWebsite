@@ -7,6 +7,8 @@ import axios from "axios";
 import { Link } from 'react-router-dom';
 import { Button } from '@mui/material';
 import Navbar from './Navbar';
+import Backdrop from '@mui/material/Backdrop';
+import CircularProgress from '@mui/material/CircularProgress';
 import { getRegisteredUsersCount, getProductsCount, getReviewsCount } from '../services/statsService';
 
 function HomePage() {
@@ -14,13 +16,16 @@ function HomePage() {
     let [registeredUsersCount, setRegisteredUsersCount] = useState(0);
     let [productsCount, setProductsCount] = useState(0);
     let [reviewsCount, setReviewsCount] = useState(0);
+    const [showLoader, setShowLoader] = useState(true);
     useEffect(() => {
         axios.get('http://localhost:8085/categories').then((response) => {
             return response.data;
         }).then((data) => {
             console.log(data);
             setCategories(data);
+            setShowLoader(false);
         }).catch((error) => {
+            setShowLoader(false);
             console.log(error);
         })
 
@@ -45,6 +50,12 @@ function HomePage() {
 
     return (
         <>
+            <Backdrop
+                sx={{ color: 'red', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+                open={showLoader}
+            >
+                <CircularProgress color="inherit" />
+            </Backdrop>
             <Navbar />
             <br />
             <div id="main">

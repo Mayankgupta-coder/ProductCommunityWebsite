@@ -6,6 +6,7 @@ import {
     MDBBtn,
     MDBFile,
 } from 'mdb-react-ui-kit';
+import Navbar from '../Navbar';
 
 function AddCategories() {
 
@@ -47,6 +48,8 @@ function AddCategories() {
     }
     return (
         <>
+            <Navbar/>
+            <br/>
             <div id="main">
                 <h1>Add Category</h1>
                 <div id="add_category_form">

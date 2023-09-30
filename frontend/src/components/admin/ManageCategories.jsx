@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react'
 import axios from "axios";
 import { MDBBtn, MDBTable, MDBTableHead, MDBTableBody } from 'mdb-react-ui-kit';
+import Navbar from '../Navbar';
 
 function ManageCategories() {
     let [categories, setCategories] = useState([]);
-    
+
     useEffect(() => {
         axios.get('http://localhost:8085/categories').then((response) => {
             return response.data;
@@ -16,9 +17,11 @@ function ManageCategories() {
         })
     }, [])
 
-   
+
     return (
         <>
+            <Navbar/>
+            <br/>
             <h1>Manage Category Details</h1>
             <MDBTable align='middle' className="container">
                 <MDBTableHead>
@@ -37,12 +40,27 @@ function ManageCategories() {
                                     <tr>
                                         <td>
                                             <div className='d-flex align-items-center'>
-                                                <img
-                                                    src='https://mdbootstrap.com/img/new/avatars/8.jpg'
-                                                    alt=''
-                                                    style={{ width: '45px', height: '45px' }}
-                                                    className='rounded-circle'
-                                                />
+                                                {
+                                                    category.categoryImage === 'test' ? (
+                                                    <>
+                                                        <img
+                                                            src='https://mdbootstrap.com/img/new/avatars/8.jpg'
+                                                            alt=''
+                                                            style={{ width: '45px', height: '45px' }}
+                                                            className='rounded-circle'
+                                                        />
+                                                    </>
+                                                    ) : (
+                                                    <>
+                                                        <img
+                                                            src={`/images/${category.categoryImage}`}
+                                                            alt=''
+                                                            style={{ width: '45px', height: '45px' }}
+                                                            className='rounded-circle'
+                                                        />
+                                                    </>)
+                                                }
+
                                                 <div className='ms-3'>
                                                     <p className='fw-normal mb-1'>{category.categoryId}</p>
                                                 </div>
@@ -52,7 +70,7 @@ function ManageCategories() {
                                         <td>
                                             <p className='fw-bold mb-1'>{category.categoryName}</p>
                                         </td>
-                                        
+
                                         <td>
                                             <MDBBtn color='primary' rounded size='sm'>
                                                 Edit

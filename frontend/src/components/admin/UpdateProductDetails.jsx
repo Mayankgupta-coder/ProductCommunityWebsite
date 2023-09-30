@@ -18,7 +18,7 @@ function UpdateProductDetails() {
     let { productId } = useParams();
 
     let [product, setProduct] = useState({});
-    const [open, setOpen] = useState(false);
+    const [successAlertOpen, setSuccessAlertOpen] = useState(false);
 
     useEffect(() => {
         getProductById(productId).then((product) => {
@@ -36,7 +36,7 @@ function UpdateProductDetails() {
 
         updateProductDetails(product).then((product) => {
             console.log(product);
-            setOpen(true);
+            setSuccessAlertOpen(true);
             setTimeout(()=>{
                 window.location.href="/admin/manage/product"
             },2000)
@@ -47,7 +47,7 @@ function UpdateProductDetails() {
     return (
         <>
             <Box sx={{ width: '100%' }}>
-                <Collapse in={open}>
+                <Collapse in={successAlertOpen}>
                     <Alert
                         action={
                             <IconButton
@@ -55,7 +55,7 @@ function UpdateProductDetails() {
                                 color="inherit"
                                 size="small"
                                 onClick={() => {
-                                    setOpen(false);
+                                    setSuccessAlertOpen(false);
                                 }}
                             >
                                 <CloseIcon fontSize="inherit" />

@@ -1,12 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { MDBBtn, MDBTable, MDBTableHead, MDBTableBody } from 'mdb-react-ui-kit';
-import { getProducts } from '../../services/productService';
+import { getProducts,deleteProductById } from '../../services/productService';
+import Alert from '@mui/material/Alert';
+import IconButton from '@mui/material/IconButton';
+import Collapse from '@mui/material/Collapse';
+import CloseIcon from '@mui/icons-material/Close';
+import Box from '@mui/material/Box';
 import Navbar from '../Navbar';
 
 function ManageProducts() {
     let [products, setProducts] = useState([]);
-
+    const [successAlertOpen, setSuccessAlertOpen] = useState(false);
     useEffect(() => {
         let products = getProducts();
         products.then((product) => {
@@ -17,19 +22,40 @@ function ManageProducts() {
         })
     }, [])
 
-    // let deleteProduct=()=>{
-    //     axios.delete(`http://localhost:8085/products/0`).then((response)=>{
-    //         return response.data;
-    //     }).then((res)=>{
-    //         console.log(res);
-    //     }).catch((error)=>{
-    //         console.log(error);
-    //     })
-    // }
-
-
+    let deleteProduct=(productId)=>{
+        deleteProductById(productId).then(()=>{
+            setSuccessAlertOpen(true);
+            setTimeout(()=>{
+                window.location.href="";
+            },2000)
+        }).catch((error) => {
+            console.log(error);
+        })
+    }
+    
     return (
         <>
+        <Box sx={{ width: '100%' }}>
+                <Collapse in={successAlertOpen}>
+                    <Alert
+                        action={
+                            <IconButton
+                                aria-label="close"
+                                color="inherit"
+                                size="small"
+                                onClick={() => {
+                                    setSuccessAlertOpen(false);
+                                }}
+                            >
+                                <CloseIcon fontSize="inherit" />
+                            </IconButton>
+                        }
+                        sx={{ mb: 2 }}
+                    >
+                        Product Deleted Successfully!
+                    </Alert>
+                </Collapse>
+            </Box>
             <Navbar />
             <br />
             <h1>Manage Product Details</h1>
@@ -98,7 +124,7 @@ function ManageProducts() {
                                             </Link>
                                         </td>
                                         <td>
-                                            <MDBBtn color='danger' rounded size='sm'>
+                                            <MDBBtn onClick={()=>deleteProduct(product.productId)} color='danger' rounded size='sm'>
                                                 Delete
                                             </MDBBtn>
                                         </td>

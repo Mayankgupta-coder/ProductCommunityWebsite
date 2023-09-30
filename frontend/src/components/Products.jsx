@@ -7,14 +7,18 @@ import { Button, CardActionArea, CardActions } from '@mui/material';
 import { MDBCheckbox } from 'mdb-react-ui-kit';
 import axios from "axios";
 import { Link, useParams } from 'react-router-dom';
+import Backdrop from '@mui/material/Backdrop';
+import CircularProgress from '@mui/material/CircularProgress';
 import '../style/Products.css';
 import Navbar from './Navbar';
 import { getProducts, filterProductsByBrand, getProductByCategoryId } from '../services/productService';
 
 function Products() {
-    let [products, setProducts] = useState([]);
+    let [products, setProducts] = useState();
     let [brands, setBrands] = useState([]);
     let [uniqueBrand, setUniqueBrand] = useState([]);
+    const [showLoader, setShowLoader] = useState(true);
+    
     let { id } = useParams();
 
     useEffect(() => {
@@ -41,15 +45,21 @@ function Products() {
                 getProductByCategoryId(id).then((product) => {
                     console.log(product);
                     setProducts(product);
+                    setShowLoader(false);
                 }).catch((error) => {
-                    console.log(error);
+                    setProducts([]);
+                    setShowLoader(false);
+                    console.log("error");
                 })
             } else {
                 getProducts().then((product) => {
                     console.log(product);
                     setProducts(product);
+                    setShowLoader(false);
                 }).catch((error) => {
-                    console.log(error);
+                    setShowLoader(false);
+                    setProducts([]);
+                    console.log("error");
                 })
             }
         }
@@ -70,12 +80,20 @@ function Products() {
     }
     return (
         <>
+            <Backdrop
+                sx={{ color: 'red', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+                open={showLoader}
+            >
+                <CircularProgress color="inherit" />
+            </Backdrop>
             <Navbar />
+
             <br />
             <h1>Products</h1>
+            <br />
             <div id="product_page">
                 {
-                    products.length > 0 ? (<>
+                    products && products.length > 0 ? (<>
                         <div id="filter_product">
                             <h2>Brands</h2>
                             <br />
@@ -100,7 +118,7 @@ function Products() {
                                                     (<>
                                                         <CardMedia
                                                             component="img"
-                                                            height="140"
+                                                            height="250"
                                                             image={`/images/products/${product.productImage}`}
                                                             alt="green iguana"
                                                         />
@@ -108,7 +126,7 @@ function Products() {
                                                     (<>
                                                         <CardMedia
                                                             component="img"
-                                                            height="140"
+                                                            height="250"
                                                             image={`/images/products/default_product_image.jpg`}
                                                             alt="green iguana"
                                                         />
@@ -126,7 +144,7 @@ function Products() {
                                                 </Typography>
                                                 <span>Product Price:</span>
                                                 <Typography variant="body2" color="text.secondary">
-                                                    {product.productPrice}
+                                                    ₹ {product.productPrice}
                                                 </Typography>
                                             </CardContent>
                                         </CardActionArea>
@@ -141,10 +159,8 @@ function Products() {
                                 </>)
                             })}
                         </div>
-                    </>) : (<><h3 style={{ margin: "auto", marginTop: "10%", color: "red" }}>No Products available in this category....</h3></>)
+                    </>) : (<>{products && products.length === Number(0) ? (<><h3 style={{ margin: "auto", marginTop: "10%", color: "red" }}>No Products available in this category....</h3></>) : (<></>)}</>)
                 }
-
-
             </div>
         </>
     )

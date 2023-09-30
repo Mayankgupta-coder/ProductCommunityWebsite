@@ -16,6 +16,8 @@ import { getUsers } from '../services/UserService';
 import { postReview, getReviews } from '../services/reviewService';
 import Navbar from './Navbar';
 import { getAvgProductRating } from '../services/statsService';
+import Backdrop from '@mui/material/Backdrop';
+import CircularProgress from '@mui/material/CircularProgress';
 
 function ProductDetails() {
     let { productId } = useParams();
@@ -26,10 +28,12 @@ function ProductDetails() {
     let [user, setUser] = useState();
     let [productReviews, setProductReviews] = useState([]);
     let [loggedInUserReview, setLoggedInUserReview] = useState([]);
+    const [showLoader, setShowLoader] = useState(true);
 
     useEffect(() => {
         getProductById(productId).then((product) => {
             setProduct(product);
+            setShowLoader(false);
         }).catch((error) => {
             window.location.href = "/products";
         })
@@ -94,6 +98,12 @@ function ProductDetails() {
 
     return (
         <>
+            <Backdrop
+                sx={{ color: 'red', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+                open={showLoader}
+            >
+                <CircularProgress color="inherit" />
+            </Backdrop>
             <Navbar />
             <br />
             <div id="main">
@@ -144,7 +154,7 @@ function ProductDetails() {
                                 <br />
                                 <h6>Price</h6>
                                 <Typography variant="body2" color="text.secondary">
-                                    {product.productPrice}
+                                    ₹ {product.productPrice}
                                 </Typography>
                                 <br />
 

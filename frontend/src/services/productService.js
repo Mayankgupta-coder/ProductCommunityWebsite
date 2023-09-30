@@ -9,6 +9,7 @@ let uploadProductImage=async(productId,formData)=>{
     let response=axios.post(`http://localhost:8085//product/image/uplaod/${productId}`, formData);
     return response.data;
 }
+
 let getProducts=async ()=>{
     let response=await axios.get('http://localhost:8085/products');
     return response.data;
@@ -29,8 +30,13 @@ let updateProductDetails=async(product)=>{
     return response.data;
 }
 
+let deleteProductById=async(productId)=>{
+        let response=await axios.delete(`http://localhost:8085/products/${productId}`);
+        return response.data;
+}
+
 let filterProductsByBrand=async (brands,id)=>{
     let response=await axios.post(`http://localhost:8085/search/products/${id}`, { brands: brands });
     return response.data;
 }
-export {addProduct,uploadProductImage,getProducts,getProductById,getProductByCategoryId,updateProductDetails,filterProductsByBrand};
+export {addProduct,uploadProductImage,getProducts,getProductById,getProductByCategoryId,deleteProductById,updateProductDetails,filterProductsByBrand};
