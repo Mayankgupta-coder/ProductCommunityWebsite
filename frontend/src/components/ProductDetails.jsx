@@ -35,7 +35,7 @@ function ProductDetails() {
             setProduct(product);
             setShowLoader(false);
         }).catch((error) => {
-            window.location.href = "/products";
+            window.location.href = "/products/category/0";
         })
 
         let username = localStorage.getItem("username");
@@ -172,7 +172,7 @@ function ProductDetails() {
 
                 </div>
                 {
-                    loggedInUserReview.length === 0 ? (<div className="container mt-4">
+                    loggedInUserReview.length === 0 ? (<div className="container mt-5">
                         <h3>Please give us your valuable feedback</h3>
                         <form onSubmit={submit}>
                             <MDBTextArea

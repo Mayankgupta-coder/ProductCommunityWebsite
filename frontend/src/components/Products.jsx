@@ -120,7 +120,7 @@ function Products() {
                                                             component="img"
                                                             height="250"
                                                             image={`/images/products/${product.productImage}`}
-                                                            alt="green iguana"
+                                                            alt="product"
                                                         />
                                                     </>) :
                                                     (<>
@@ -128,7 +128,7 @@ function Products() {
                                                             component="img"
                                                             height="250"
                                                             image={`/images/products/default_product_image.jpg`}
-                                                            alt="green iguana"
+                                                            alt="product"
                                                         />
                                                     </>)
                                             }

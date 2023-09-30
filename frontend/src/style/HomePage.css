@@ -40,24 +40,21 @@
     height:auto;
     width:100vw;
     /* border:2px solid blue; */
-    display:flex;
-    flex-wrap:wrap;
 }
 
 .category {
-    height:auto;
-    width:15%;
-    /* border:2px solid red; */
+    height:300px;
+    width:50%;
+    /* border:2px solid blue; */
     border-radius:70%;
     margin:auto;
     margin-top:3%;
-    margin-left:2%;
     display:flex;
     flex-wrap: wrap;
     
 }
 .category_img{
-    height:150px;
+    height:180px;
     width:100%;
     /* border:2px solid red; */
     border-radius:70%;
