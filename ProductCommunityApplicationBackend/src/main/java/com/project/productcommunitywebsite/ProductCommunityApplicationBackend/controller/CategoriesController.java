@@ -96,7 +96,7 @@ public class CategoriesController {
 	@CrossOrigin("*")
 	public void uploadCategoryImage(@RequestParam("categoryImage") MultipartFile image,@PathVariable("id") int id) throws IOException {
 		Categories category=categoriesService.getCategory(id);
-		String path="C:\\Users\\DELL\\Desktop\\ProductCommunityWebsite\\frontend\\src\\images";
+		String path="C:\\Users\\DELL\\Desktop\\ProductCommunityWebsite\\frontend\\public\\images";
 		String fileName=categoriesService.uploadCategoryImage(path, image);
 		category.setCategoryImage(fileName);
 		categoriesService.updateCategory(category, id);
