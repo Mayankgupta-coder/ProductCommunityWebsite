@@ -97,10 +97,10 @@ public class StatsController {
 		try {
 			avgRating=Math.round(totalRating/totalProductReviews);
 		} catch(Exception e) {
-			System.out.println(e);
+			return new ResponseEntity<>(0,HttpStatus.NOT_FOUND);
 		}
 		if(totalProductReviews==0) {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+			return new ResponseEntity<>(0,HttpStatus.NOT_FOUND);
 		}
 		return new ResponseEntity<>(avgRating,HttpStatus.OK);
 	}
