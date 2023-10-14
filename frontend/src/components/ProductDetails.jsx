@@ -18,6 +18,10 @@ import Navbar from './Navbar';
 import { getAvgProductRating } from '../services/statsService';
 import Backdrop from '@mui/material/Backdrop';
 import CircularProgress from '@mui/material/CircularProgress';
+import Alert from '@mui/material/Alert';
+import IconButton from '@mui/material/IconButton';
+import Collapse from '@mui/material/Collapse';
+import CloseIcon from '@mui/icons-material/Close';
 
 function ProductDetails() {
     let { productId } = useParams();
@@ -29,6 +33,8 @@ function ProductDetails() {
     let [productReviews, setProductReviews] = useState([]);
     let [loggedInUserReview, setLoggedInUserReview] = useState([]);
     const [showLoader, setShowLoader] = useState(true);
+    const [successAlertOpen, setSuccessAlertOpen] = useState(false);
+    const [errorAlertOpen, setErrorAlertOpen] = useState(false);
 
     useEffect(() => {
         getProductById(productId).then((product) => {
@@ -87,11 +93,17 @@ function ProductDetails() {
         console.log(review);
         if (review.rating > 0) {
             postReview(review).then((review) => {
+                setSuccessAlertOpen(true);
+                setTimeout(()=>{
+                    window.location.reload();
+                },2000)
                 console.log(review);
             }).catch((error) => {
+                setErrorAlertOpen(true);
                 console.log(error);
             })
         } else {
+            setErrorAlertOpen(true);
             console.log("Please rate");
         }
     }
@@ -171,6 +183,49 @@ function ProductDetails() {
                     </div>
 
                 </div>
+                <br />
+                <Box sx={{ width: '100%' }}>
+                    <Collapse in={successAlertOpen}>
+                        <Alert severity="success"
+                            action={
+                                <IconButton
+                                    aria-label="close"
+                                    color="inherit"
+                                    size="small"
+                                    onClick={() => {
+                                        setSuccessAlertOpen(false);
+                                    }}
+                                >
+                                    <CloseIcon fontSize="inherit" />
+                                </IconButton>
+                            }
+                            sx={{ mb: 2 }}
+                        >
+                            Review Posted Successfully!
+                        </Alert>
+                    </Collapse>
+                </Box>
+                <Box sx={{ width: '100%' }}>
+                    <Collapse in={errorAlertOpen}>
+                        <Alert severity="error"
+                            action={
+                                <IconButton
+                                    aria-label="close"
+                                    color="inherit"
+                                    size="small"
+                                    onClick={() => {
+                                        setErrorAlertOpen(false);
+                                    }}
+                                >
+                                    <CloseIcon fontSize="inherit" />
+                                </IconButton>
+                            }
+                            sx={{ mb: 2 }}
+                        >
+                            Some Error Occured! Please Try Again!
+                        </Alert>
+                    </Collapse>
+                </Box>
                 {
                     loggedInUserReview.length === 0 ? (<div className="container mt-5">
                         <h3>Please give us your valuable feedback</h3>

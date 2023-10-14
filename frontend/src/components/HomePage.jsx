@@ -40,13 +40,13 @@ function HomePage() {
         }
     };
 
-    
+
     useEffect(() => {
         axios.get('http://localhost:8085/categories').then((response) => {
             return response.data;
-        }).then((data) => {
-            console.log(data);
-            setCategories(data);
+        }).then((categories) => {
+            console.log(categories);
+            setCategories(categories);
             setShowLoader(false);
         }).catch((error) => {
             setShowLoader(false);
@@ -83,7 +83,7 @@ function HomePage() {
             <Navbar />
 
             <br />
-            <div id="main">
+            <div id="main_div">
                 <div id="all_stats">
                     <div className="stats" id="total_users">
                         <div className="icon"><PersonIcon fontSize="large" /></div>
@@ -125,12 +125,11 @@ function HomePage() {
                                             <div className="category">
 
                                                 {category.categoryImage !== "test" ?
-                                                    (
-                                                        <img className="category_img" src={`images/${category.categoryImage}`} alt="img" />)
+                                                    (<img className="category_img" src={`images/${category.categoryImage}`} alt="img" />)
                                                     : (<img className="category_img" src={`images/products/default_product_image.jpg`} alt="img" />)}
 
                                                 <Link to={`/products/category/${category.categoryId}`}>
-                                                    <Button id="category_name" style={{ marginLeft: "50%", marginTop: "20%" }} variant="contained" size="small" color="primary">
+                                                    <Button id="category_btn" style={{ marginLeft: "100%", marginTop: "20%" }} variant="contained" size="small" color="primary">
                                                         {category.categoryName}
                                                     </Button>
                                                 </Link>
@@ -144,9 +143,10 @@ function HomePage() {
                     </div>
 
                 </div>
+                <br/>
             </div>
-            <br/>
-            <Footer/>
+            <br />
+            <Footer />
         </>
     )
 }
