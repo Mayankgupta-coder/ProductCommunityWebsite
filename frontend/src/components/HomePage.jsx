@@ -127,12 +127,13 @@ function HomePage() {
                                                 {category.categoryImage !== "test" ?
                                                     (<img className="category_img" src={`images/${category.categoryImage}`} alt="img" />)
                                                     : (<img className="category_img" src={`images/products/default_product_image.jpg`} alt="img" />)}
-
-                                                <Link to={`/products/category/${category.categoryId}`}>
-                                                    <Button id="category_btn" style={{ marginLeft: "100%", marginTop: "20%" }} variant="contained" size="small" color="primary">
-                                                        {category.categoryName}
-                                                    </Button>
-                                                </Link>
+                                                <div id="btn_div" style={{ height:"100%",width:"100%"}}>
+                                                    <Link to={`/products/category/${category.categoryId}`}>
+                                                        <Button id="category_btn" style={{ marginLeft: "20%",marginTop:"15%",width:"60%" }} variant="contained" size="small" color="primary">
+                                                            {category.categoryName}
+                                                        </Button>
+                                                    </Link>
+                                                </div>
                                             </div>
                                         </>
                                     )
