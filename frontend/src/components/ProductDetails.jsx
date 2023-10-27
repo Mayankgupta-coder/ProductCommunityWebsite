@@ -1,37 +1,26 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, Link } from "react-router-dom";
+import { useParams} from "react-router-dom";
 import { getProductById } from '../services/productService';
 import Card from '@mui/material/Card';
 import CardMedia from '@mui/material/CardMedia';
 import { CardActionArea, CardContent, Typography, Box, Rating } from '@mui/material';
-import {
-    MDBTextArea,
-    MDBBtn
-} from 'mdb-react-ui-kit';
 import "../style/ProductDetails.css";
 import { getUsers } from '../services/UserService';
-import { postReview,getReviews } from '../services/reviewService';
+import { getReviews } from '../services/reviewService';
 import Navbar from './Navbar';
 import { getAvgProductRating } from '../services/statsService';
 import Backdrop from '@mui/material/Backdrop';
 import CircularProgress from '@mui/material/CircularProgress';
-import Alert from '@mui/material/Alert';
-import IconButton from '@mui/material/IconButton';
-import Collapse from '@mui/material/Collapse';
-import CloseIcon from '@mui/icons-material/Close';
 import ProductReviews from './ProductReviews';
+import PostProductReview from './PostProductReview';
 
 function ProductDetails() {
     let { productId } = useParams();
     let [product, setProduct] = useState({});
     let [avgProductRating, setAvgProductRating] = useState(0);
-    let [productRating, setProductRating] = useState();
-    let [review, setReview] = useState({});
     let [user, setUser] = useState();
     let [loggedInUserReview,setLoggedInUserReview]=useState([]);
     const [showLoader, setShowLoader] = useState(true);
-    const [successAlertOpen, setSuccessAlertOpen] = useState(false);
-    const [errorAlertOpen, setErrorAlertOpen] = useState(false);
 
     useEffect(() => {
         getProductById(productId).then((product) => {
@@ -70,26 +59,7 @@ function ProductDetails() {
 
     }, [productId]);
 
-    let submit = (e) => {
-        e.preventDefault();
-        console.log(review);
-        if (review.rating > 0) {
-            postReview(review).then((review) => {
-                setSuccessAlertOpen(true);
-                setTimeout(() => {
-                    window.location.reload();
-                }, 2000)
-                console.log(review);
-            }).catch((error) => {
-                setErrorAlertOpen(true);
-                console.log(error);
-            })
-        } else {
-            setErrorAlertOpen(true);
-            console.log("Please rate");
-        }
-    }
-
+    
     return (
         <>
             <Backdrop
@@ -166,81 +136,11 @@ function ProductDetails() {
 
                 </div>
                 <br />
-                <Box sx={{ width: '100%' }}>
-                    <Collapse in={successAlertOpen}>
-                        <Alert severity="success"
-                            action={
-                                <IconButton
-                                    aria-label="close"
-                                    color="inherit"
-                                    size="small"
-                                    onClick={() => {
-                                        setSuccessAlertOpen(false);
-                                    }}
-                                >
-                                    <CloseIcon fontSize="inherit" />
-                                </IconButton>
-                            }
-                            sx={{ mb: 2 }}
-                        >
-                            Review Posted Successfully!
-                        </Alert>
-                    </Collapse>
-                </Box>
-                <Box sx={{ width: '100%' }}>
-                    <Collapse in={errorAlertOpen}>
-                        <Alert severity="error"
-                            action={
-                                <IconButton
-                                    aria-label="close"
-                                    color="inherit"
-                                    size="small"
-                                    onClick={() => {
-                                        setErrorAlertOpen(false);
-                                    }}
-                                >
-                                    <CloseIcon fontSize="inherit" />
-                                </IconButton>
-                            }
-                            sx={{ mb: 2 }}
-                        >
-                            Some Error Occured! Please Try Again!
-                        </Alert>
-                    </Collapse>
-                </Box>
-                {
-                    loggedInUserReview.length === 0 ? (<div className="container mt-5">
-                        <h3>Please give us your valuable feedback</h3>
-                        <form onSubmit={submit}>
-                            <MDBTextArea
-                                className='mb-4'
-                                label='Product Description'
-                                id='product_desc'
-                                name="product_desc"
-                                onChange={(e) => setReview({ ...review, review: e.target.value, isApproved: true, product: { productId: productId }, user: { userId: user[0].userId } })}
-                                required
-                            />
-                            <Rating
-                                name="simple-controlled"
-                                value={productRating}
-                                onChange={(e) => {
-                                    setProductRating(e.target.value);
-                                    setReview({ ...review, rating: e.target.value });
-                                }}
-                                required
-                            />
-                            {
-                                localStorage.getItem("username") ? <MDBBtn type='submit' block>
-                                    Submit
-                                </MDBBtn> : <Link to="/login/user"><MDBBtn block>
-                                    Please login to continue
-                                </MDBBtn></Link>
-                            }
-                        </form>
-                    </div>) : (null)
-                }
+                
+                <PostProductReview loggedInUserReview={loggedInUserReview} user={user} productId={productId}/>
 
                 <ProductReviews productId={productId} />
+                
             </div>
         </>
     )
