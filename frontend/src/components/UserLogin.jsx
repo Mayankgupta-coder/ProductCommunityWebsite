@@ -41,7 +41,7 @@ function UserLogin() {
             localStorage.setItem("username", user.userName);
             setSuccessAlertOpen(true);
             setTimeout(() => {
-                navigate("/");
+                navigate(-1);
             }, 2000);
         } else {
             console.log("not exist");

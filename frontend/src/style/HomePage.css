@@ -8,13 +8,13 @@
     width:100vw;
     display:flex;
     flex-wrap: wrap;
-    background-image: url('https://wallpapercave.com/wp/wp7429710.jpg');
+    background-image: url('https://www.visiondesign.com/wp-content/uploads/hero-background-ecommerce-1.jpg');
     background-repeat: no-repeat;
 }
 
 .stats {
     height:30%;
-    width:10%;
+    width:auto;
     margin-top:10%;
     margin-left:5%;
     display:flex;

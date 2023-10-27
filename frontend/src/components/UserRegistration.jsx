@@ -78,7 +78,7 @@ function UserRegistration() {
                         }
                         sx={{ mb: 2 }}
                     >
-                        User Login Successfully!
+                        User Registered Successfully!
                     </Alert>
                 </Collapse>
             </Box>

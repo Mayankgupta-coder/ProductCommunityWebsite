@@ -86,7 +86,7 @@ function HomePage() {
             <div id="main_div">
                 <div id="all_stats">
                     <div className="stats" id="total_users">
-                        <div className="icon"><PersonIcon fontSize="large" /></div>
+                        <div className="icon"><PersonIcon fontSize="large" sx={{ color: "black" }} /></div>
                         <div className="stat">
                             {registeredUsersCount}
                             <br />
@@ -94,7 +94,7 @@ function HomePage() {
                         </div>
                     </div>
                     <div className="stats" id="total_products">
-                        <div className="icon"><InventoryIcon fontSize="large" /></div>
+                        <div className="icon"><InventoryIcon fontSize="large" sx={{ color: "black" }} /></div>
                         <div className="stat">
                             {productsCount}
                             <br />
@@ -102,7 +102,7 @@ function HomePage() {
                         </div>
                     </div>
                     <div className="stats" id="total_reviews">
-                        <div className="icon"><ReviewsIcon fontSize="large" /></div>
+                        <div className="icon"><ReviewsIcon fontSize="large" sx={{ color: "black" }} /></div>
                         <div className="stat">
                             {reviewsCount}
                             <br />
@@ -127,9 +127,9 @@ function HomePage() {
                                                 {category.categoryImage !== "test" ?
                                                     (<img className="category_img" src={`images/${category.categoryImage}`} alt="img" />)
                                                     : (<img className="category_img" src={`images/products/default_product_image.jpg`} alt="img" />)}
-                                                <div id="btn_div" style={{ height:"100%",width:"100%"}}>
+                                                <div id="btn_div" style={{ height: "100%", width: "100%" }}>
                                                     <Link to={`/products/category/${category.categoryId}`}>
-                                                        <Button id="category_btn" style={{ marginLeft: "20%",marginTop:"15%",width:"60%" }} variant="contained" size="small" color="primary">
+                                                        <Button id="category_btn" style={{ marginLeft: "20%", marginTop: "15%", width: "60%" }} variant="contained" size="small" sx={{backgroundColor:"black"}}>
                                                             {category.categoryName}
                                                         </Button>
                                                     </Link>
@@ -144,7 +144,7 @@ function HomePage() {
                     </div>
 
                 </div>
-                <br/>
+                <br />
             </div>
             <br />
             <Footer />
