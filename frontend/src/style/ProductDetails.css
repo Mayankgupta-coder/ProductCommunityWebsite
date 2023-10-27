@@ -1,22 +1,20 @@
 #main {
     height:auto;
     width:100vw;
-    /* border:2px solid red; */
 }
 #product{
     height:auto;
     width:100vw;
-    /* border:2px solid blue; */
     display:flex;
     flex-wrap:wrap;
 }
 #product_image{
     height:auto;
-    width:30vw;
+    width:auto;
+    margin-right:8vw;
 }
 
 #product_details{
-    height:60vh;
-    width:70vw;
-    /* border:2px solid pink; */
+    height:auto;
+    width:auto;
 }
