@@ -1,24 +1,20 @@
 import React, { useEffect, useState } from 'react'
-import Card from '@mui/material/Card';
-import CardContent from '@mui/material/CardContent';
-import CardMedia from '@mui/material/CardMedia';
-import Typography from '@mui/material/Typography';
-import { Button, CardActionArea, CardActions } from '@mui/material';
 import { MDBCheckbox } from 'mdb-react-ui-kit';
 import axios from "axios";
-import { Link, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import Backdrop from '@mui/material/Backdrop';
 import CircularProgress from '@mui/material/CircularProgress';
 import '../style/Products.css';
 import Navbar from './Navbar';
 import { getProducts, filterProductsByBrand, getProductByCategoryId } from '../services/productService';
+import Product from './Product';
 
 function Products() {
     let [products, setProducts] = useState();
     let [brands, setBrands] = useState([]);
     let [uniqueBrand, setUniqueBrand] = useState([]);
     const [showLoader, setShowLoader] = useState(true);
-    
+
     let { id } = useParams();
 
     useEffect(() => {
@@ -111,51 +107,7 @@ function Products() {
                         <div id="products">
                             {products.map((product) => {
                                 return (<>
-                                    <Card sx={{ width: 300, marginRight: '2%', marginBottom: '2%' }}>
-                                        <CardActionArea>
-                                            {
-                                                product.productImage !== "test" ?
-                                                    (<>
-                                                        <CardMedia
-                                                            component="img"
-                                                            height="250"
-                                                            image={`/images/products/${product.productImage}`}
-                                                            alt="product"
-                                                        />
-                                                    </>) :
-                                                    (<>
-                                                        <CardMedia
-                                                            component="img"
-                                                            height="250"
-                                                            image={`/images/products/default_product_image.jpg`}
-                                                            alt="product"
-                                                        />
-                                                    </>)
-                                            }
-
-                                            <CardContent>
-                                                <span>Product Name:</span>
-                                                <Typography gutterBottom variant="h5" component="div">
-                                                    {product.productName}
-                                                </Typography>
-                                                <span>Product Brand:</span>
-                                                <Typography variant="body2" color="text.secondary">
-                                                    {product.productBrand}
-                                                </Typography>
-                                                <span>Product Price:</span>
-                                                <Typography variant="body2" color="text.secondary">
-                                                    ₹ {product.productPrice}
-                                                </Typography>
-                                            </CardContent>
-                                        </CardActionArea>
-                                        <CardActions>
-                                            <Link to={`/product/${product.productId}`}>
-                                                <Button size="small" color="primary">
-                                                    View Product Details
-                                                </Button>
-                                            </Link>
-                                        </CardActions>
-                                    </Card>
+                                    <Product product={product} />
                                 </>)
                             })}
                         </div>
