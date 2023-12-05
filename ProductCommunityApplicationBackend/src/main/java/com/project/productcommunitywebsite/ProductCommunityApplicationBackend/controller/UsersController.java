@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.project.productcommunitywebsite.ProductCommunityApplicationBackend.entities.Users;
-import com.project.productcommunitywebsite.ProductCommunityApplicationBackend.exceptions.ProductServiceException;
 import com.project.productcommunitywebsite.ProductCommunityApplicationBackend.exceptions.UserServiceException;
 import com.project.productcommunitywebsite.ProductCommunityApplicationBackend.services.UsersServiceImpl;
 
