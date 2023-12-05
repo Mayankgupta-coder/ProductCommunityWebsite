@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.project.productcommunitywebsite.ProductCommunityApplicationBackend.entities.Users;
+import com.project.productcommunitywebsite.ProductCommunityApplicationBackend.exceptions.ProductServiceException;
+import com.project.productcommunitywebsite.ProductCommunityApplicationBackend.exceptions.UserServiceException;
 import com.project.productcommunitywebsite.ProductCommunityApplicationBackend.services.UsersServiceImpl;
 
 @RestController
@@ -43,10 +45,13 @@ public class UsersController {
 		try {
 			List<Users> users=usersService.getUsers();
 			if(users.size()==0) {
-				return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+				throw new UserServiceException("Users not found");
 			}
 			return new ResponseEntity<>(users,HttpStatus.OK);
 		} catch(Exception e) {
+			if(e.getClass().getSimpleName().equals("UserServiceException")) {
+				throw new UserServiceException("Users not found");
+			}
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
 		}
 	}

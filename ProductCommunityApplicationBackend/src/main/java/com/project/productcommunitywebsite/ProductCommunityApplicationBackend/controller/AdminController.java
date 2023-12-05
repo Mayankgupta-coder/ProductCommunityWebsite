@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.project.productcommunitywebsite.ProductCommunityApplicationBackend.entities.Admin;
+import com.project.productcommunitywebsite.ProductCommunityApplicationBackend.exceptions.AdminServiceException;
 import com.project.productcommunitywebsite.ProductCommunityApplicationBackend.services.AdminServiceImpl;
 
 @RestController
@@ -42,10 +43,13 @@ public class AdminController {
 		try {
 			List<Admin> admins=adminService.getAdmin();
 			if(admins.size()==0) {
-				return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+				throw new AdminServiceException("Admin not found");
 			}
 			return new ResponseEntity<>(admins,HttpStatus.OK);
 		} catch(Exception e) {
+			if(e.getClass().getSimpleName().equals("AdminServiceException")) {
+				throw new AdminServiceException("Admin not found");
+			}
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
 		}
 	}

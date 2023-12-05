@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.project.productcommunitywebsite.ProductCommunityApplicationBackend.entities.Categories;
+import com.project.productcommunitywebsite.ProductCommunityApplicationBackend.exceptions.CategoryServiceException;
 import com.project.productcommunitywebsite.ProductCommunityApplicationBackend.services.CategoriesServiceImpl;
 
 @RestController
@@ -47,10 +48,13 @@ public class CategoriesController {
 		try {
 			List<Categories> categories=categoriesService.getCategories();
 			if(categories.size()==0) {
-				return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+				throw new CategoryServiceException("Category not found");
 			}
 			return new ResponseEntity<>(categories,HttpStatus.OK);
 		} catch(Exception e) {
+			if(e.getClass().getSimpleName().equals("CategoryServiceException")) {
+				throw new CategoryServiceException("Category not found");
+			}
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
 		}
 	}
@@ -81,11 +85,14 @@ public class CategoriesController {
 		try {
 			Categories category=categoriesService.getCategory(id);
 			if(category==null) {
-				return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+				throw new CategoryServiceException("Category not found with id "+id);
 			}
 		
 			return ResponseEntity.of(Optional.of(category));
 		} catch(Exception e) {
+			if(e.getClass().getSimpleName().equals("CategoryServiceException")) {
+				throw new CategoryServiceException("Category not found with id "+id);
+			}
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
 		}
 	}

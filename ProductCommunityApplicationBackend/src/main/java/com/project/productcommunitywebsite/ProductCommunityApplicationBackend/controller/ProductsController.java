@@ -22,6 +22,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.project.productcommunitywebsite.ProductCommunityApplicationBackend.entities.Categories;
 import com.project.productcommunitywebsite.ProductCommunityApplicationBackend.entities.Products;
+import com.project.productcommunitywebsite.ProductCommunityApplicationBackend.exceptions.ProductServiceException;
 import com.project.productcommunitywebsite.ProductCommunityApplicationBackend.model.Brands;
 import com.project.productcommunitywebsite.ProductCommunityApplicationBackend.services.CategoriesServiceImpl;
 import com.project.productcommunitywebsite.ProductCommunityApplicationBackend.services.ProductsServiceImpl;
@@ -55,10 +56,13 @@ public class ProductsController {
 		try {
 			List<Products> products=productsService.getProducts();
 			if(products.size()==0) {
-				return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+				throw new ProductServiceException("Product not found");
 			}
 			return new ResponseEntity<>(products,HttpStatus.OK);
 		} catch(Exception e) {
+			if(e.getClass().getSimpleName().equals("ProductServiceException")) {
+				throw new ProductServiceException("Product not found");
+			}
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
 		}
 	}
@@ -68,12 +72,20 @@ public class ProductsController {
 	@GetMapping("/products/{id}")
 	@CrossOrigin("*")
 	public ResponseEntity<Products> getProduct(@PathVariable("id") int id) {
-		Products product=productsService.getProduct(id);
-		if(product==null) {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+		try {
+			Products product=productsService.getProduct(id);
+			if(product==null) {
+				throw new ProductServiceException("Product not found with id "+id);
+			}
+		
+			return ResponseEntity.of(Optional.of(product));
+		} catch(Exception e) {
+			if(e.getClass().getSimpleName().equals("ProductServiceException")) {
+				throw new ProductServiceException("Product not found with id "+id);
+			}
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
 		}
-	
-		return ResponseEntity.of(Optional.of(product));
+		
 	}
 	
 	//	Api to get product by category
@@ -86,10 +98,13 @@ public class ProductsController {
 			category.setCategoryId(id);
 			List<Products> products=productsService.getProductsByCategory(category);
 			if(products.size()==0) {
-				return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+				throw new ProductServiceException("No products found in category with category id "+id);
 			}
 			return new ResponseEntity<>(products,HttpStatus.OK);
 		} catch(Exception e) {
+			if(e.getClass().getSimpleName().equals("ProductServiceException")) {
+				throw new ProductServiceException("No products found in category with category id "+id);
+			}
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
 		}
 	}
@@ -134,10 +149,13 @@ public class ProductsController {
 			}
 			
 			if(products.size()==0) {
-				return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+				throw new ProductServiceException("No products found in category with category id "+id+" with given brands "+brands.getBrands());
 			}
 			return new ResponseEntity<>(products,HttpStatus.OK);
 		} catch(Exception e) {
+			if(e.getClass().getSimpleName().equals("ProductServiceException")) {
+				throw new ProductServiceException("No products found in category with category id "+id+" with given brands "+brands.getBrands());
+			}
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
 		}
 		
@@ -157,7 +175,7 @@ public class ProductsController {
 			}
 			
 			if(products.size()==0) {
-				return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+				throw new ProductServiceException("No product brand found in category with category id "+ id);
 			}
 			Set<String>brands=new HashSet<>();
 			for(Products product:products) {
@@ -165,6 +183,9 @@ public class ProductsController {
 			}
 			return new ResponseEntity<>(brands,HttpStatus.OK);
 		} catch(Exception e) {
+			if(e.getClass().getSimpleName().equals("ProductServiceException")) {
+				throw new ProductServiceException("No product brand found in category with category id "+ id);
+			}
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
 		}
 	}
